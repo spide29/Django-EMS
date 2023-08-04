@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="Muhamad Nauval Azhar">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" content="This is a login page template based on Bootstrap 5">
+	<title>Bootstrap 5 Login Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+</head>
+
+<body>
+	<section class="h-100">
+		<div class="container h-100">
+			<div class="row justify-content-sm-center h-100">
+				<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+					<div class="text-center my-5">
+						<img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="logo" width="100">
+					</div>
+					<div class="card shadow-lg">
+						<div class="card-body p-5">
+							<h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
+							<!-- <form method="POST" class="needs-validation" novalidate="" autocomplete="off"> -->
+                            <form id="signup-form">
+								<div class="mb-3">
+                                    <label class="mb-2 text-muted" for="username">Username:</label>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter the username" value="" required autofocus>
+									<div class="invalid-feedback">
+										Name is required	
+									</div>
+								</div>
+
+								<div class="mb-3">
+                                    <label class="mb-2 text-muted" for="email">Email:</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter the email" value="" required autofocus>
+									<div class="invalid-feedback">
+										Email is invalid
+									</div>
+								</div>
+                                <div class="mb-3">
+                                    <label class="mb-2 text-muted" for="phone">Phone:</label>
+                                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter the phone" value="" required autofocus>
+									<div class="invalid-feedback">
+										Email is invalid
+									</div>
+								</div>
+                                <div class="mb-3">
+                                    <label class="mb-2 text-muted" for="dob">DOB:</label>
+                                    <input type="date" class="form-control" id="dob" name="dob" placeholder="Enter the DOB" value="" required autofocus>
+									<div class="invalid-feedback">
+										DOB is invalid
+									</div>
+								</div>
+                                
+								<div class="mb-3">
+									<label class="mb-2 text-muted" for="password">Password</label>
+									<input id="password" type="password" class="form-control" name="password" required>
+								    <div class="invalid-feedback">
+								    	Password is required
+							    	</div>
+								</div>
+                                <div class="mb-3">
+									<label class="mb-2 text-muted" for="confirmpass">Confirm Password</label>
+									<input id="confirmpass" type="password" class="form-control" name="confirmpass" required>
+								    <div class="invalid-feedback">
+								    	Password is required
+							    	</div>
+								</div>
+
+								<p class="form-text text-muted mb-3">
+									By registering you agree with our terms and condition.
+								</p>
+
+								<div class="align-items-center d-flex">
+									<button type="submit" class="btn btn-primary ms-auto">
+										Register	
+									</button>
+								</div>
+							</form>
+						</div>
+						<div class="card-footer py-3 border-0">
+							<div class="text-center">
+								Already have an account? <a href="/account/" class="text-dark">Login</a>
+							</div>
+						</div>
+					</div>
+					<div class="text-center mt-5 text-muted">
+						Copyright &copy; 2017-2021 &mdash; Your Company 
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    <script>
+        $(document).ready(function() {
+            $("#signup-form").submit(function(event) {
+                event.preventDefault();
+    
+                var formData = {
+                    "username": $("#username").val(),
+                    "email": $("#email").val(),
+                    "phone_number": $("#phone").val(),
+                    "date_of_birth": $("#dob").val(),
+                    "password": $("#password").val(),
+                    "confirm_password": $("#confirmpass").val()
+                };
+    
+                $.ajax({
+                      url: "/account/register/",
+                      type: "POST",
+                      data: formData,
+                      success: function(response) {
+                          // Handle successful signup
+                          console.log("Signup successful!");
+                          console.log(response);
+                          // Redirect to login page
+                          window.location.href = "/account/";
+                      },
+                      error: function(xhr, status, error) {
+                          // Handle error
+                          console.log("Signup failed!");
+                          console.log(xhr.responseJSON);
+                          var errors = xhr.responseJSON.password;
+                          displayErrors(errors);
+                      }
+                  });
+              });
+  
+              function displayErrors(errors) {
+                  var errorList = "";
+                  if (errors) {
+                      errorList += errors.join("<br>");
+                  }
+  
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Signup Failed',
+                      html: errorList,
+                      confirmButtonText: 'OK'
+                  });
+              }
+          });
+    </script>
+	<!-- <script src="js/login.js"></script> -->
+</body>
+</html>
