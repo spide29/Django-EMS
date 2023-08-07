@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'drf_yasg',
     'account',
@@ -88,6 +89,11 @@ SWAGGER_SETTINGS = {
     },
 }
 
+DEFAULT_AUTHENTICATION_CLASSES = [
+  'rest_framework.authentication.SessionAuthentication',
+  'rest_framework.authentication.BasicAuthentication',
+  'my_app.authentication.JWTAuthentication',
+]
 # Add the token expiration settings (Optional, you can adjust the expiration time as per your needs)
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
@@ -173,7 +179,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS =[
+    os.path.join(BASE_DIR, 'static'),
+    # os.path.join(BASE_DIR, 'reactfirst/src'),
+
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

@@ -73,7 +73,7 @@
 						</div>
 						<div class="card-footer py-3 border-0">
 							<div class="text-center">
-								Don't have an account? <a href="/account/login/" class="text-dark">Create One</a>
+								Don't have an account? <a href="/account/signup/" class="text-dark">Create One</a>
 							</div>
 						</div>
 					</div>
@@ -86,7 +86,7 @@
 	</section>
     <script>
         $(document).ready(function() {
-            $("#signup-form").submit(function(event) {
+            $("#login-form").submit(function(event) {
                 event.preventDefault();
     
                 var formData = {
@@ -95,40 +95,49 @@
                 };
     
                 $.ajax({
-                      url: "/account/login/",
-                      type: "POST",
-                      data: formData,
-                      success: function(response) {
-                          // Handle successful signup
-                          console.log("Signup successful!");
-                          console.log(response);
-                          // Redirect to login page
-                          window.location.href = "/account/";
-                      },
-                      error: function(xhr, status, error) {
-                          // Handle error
-                          console.log("Signup failed!");
-                          console.log(xhr.responseJSON);
-                          var errors = xhr.responseJSON.password;
-                          displayErrors(errors);
-                      }
-                  });
-              });
-  
-              function displayErrors(errors) {
-                  var errorList = "";
-                  if (errors) {
-                      errorList += errors.join("<br>");
-                  }
-  
-                  Swal.fire({
-                      icon: 'error',
-                      title: 'Signup Failed',
-                      html: errorList,
-                      confirmButtonText: 'OK'
-                  });
-              }
-          });
+                    url: "/account/login/",
+                    type: "POST",
+                    data: formData,
+                    success: function(response) {
+                        // Handle successful login
+                        console.log("Login successful!");
+                        console.log(response);
+    
+                        // Extract the access token from the response
+                        var access_token = response.access_token;
+                        localStorage.setItem("token", response.access_token);
+
+    
+                        // Save the access token to use for subsequent API requests (optional)
+                        // For example, you can store it in a cookie or local storage.
+    
+                        // Redirect to the home page
+                        window.location.href = "/account/home/"; // Replace "/home/" with the actual URL of your home page function
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error
+                        console.log("Login failed!");
+                        console.log(xhr.responseJSON);
+                        var errors = xhr.responseJSON.error;
+                        displayErrors(errors);
+                    }
+                });
+            });
+    
+            function displayErrors(errors) {
+                var errorList = "";
+                if (errors) {
+                    errorList += errors;
+                }
+    
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Failed',
+                    text: errorList,
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
     </script>
 
 	<!-- <script src="js/login.js"></script> -->
