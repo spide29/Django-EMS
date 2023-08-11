@@ -6,25 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <!-- DataTables JS -->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Dashboard</title>
     <style>
-         body {
+        body {
             background-color: #fff4c8; /* You can replace this with any color code you prefer */
         }
-        .inf-content{
-            border:2px solid #DDDDDD;
-            -webkit-border-radius:10px;
-            -moz-border-radius:10px;
-            border-radius:10px;
-            box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
-        }	
+		
     </style>
   </head>
   <body>
@@ -33,18 +28,23 @@
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                 <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <span class="fs-5 d-none d-sm-inline">Employee Dashboard</span>
+                    <span class="fs-5 d-none d-sm-inline">Admin Dashboard</span>
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
+                        <a href="/account/home/" class="nav-link align-middle px-0">
                             <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/emp/empleave/" class="nav-link px-0 align-middle">
+                        <a href="#" class="nav-link px-0 align-middle">
                             <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Leave Form</span> </a>
                     </li>
+                    <li>
+                      <a href="#" class="nav-link px-0 align-middle">
+                          <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Profile Settings</span></a>
+                    </li>
+                    
                     <li>
                       <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
                          id="dashboardLink">
@@ -60,10 +60,6 @@
                       </ul>
                   </li>
                     <li>
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span></a>
-                    </li>
-                    <li>
                         <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
                             <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
                         <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
@@ -75,7 +71,7 @@
                             </li>
                         </ul>
                     </li>
-                   
+                    
                 </ul>
                 <form id="logout-btn">
                     <button type="submit" class="btn btn-danger">Logout</button>
@@ -84,80 +80,88 @@
                 <hr>
             </div>
         </div>
-        <div class="col py-3">
+        <div class="col py-2">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Employee Panel</a>
-
-                  
+                    <a class="navbar-brand" href="#">Employee Leave Panel</a>
                   <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-md-auto gap-2">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{% static 'img/usericon.png' %}" height="50" width="50" class="d-inline-block align-top">
                             <span class="d-none d-sm-inline mx-1" id="username-display"></span>
                         </a>
-                
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/home/doctor-signup">Profile Settings</a></li>
-                            <li><a class="dropdown-item" href="/home/patient-signup">Notification</a></li>
+                            <li><a class="dropdown-item" href="#">Profile Settings</a></li>
+                            <li><a class="dropdown-item" href="#">Notification</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li><a class="dropdown-item" href="/admin">Admin</a></li>
                         </ul>
-                      
                     </ul>
                   </div>
                 </div>
               </nav>
-          <div class="container py-5">
-            {% if access_token %}
-            <p id="access-token" style="display: none;" >{% if access_token %}{{ access_token }}{% endif %}</p>
-            {% else %}
-            {% endif %}
-            
-            <div class="container bootstrap snippets bootdey">
-                <div class="panel-body inf-content">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <img alt="" style="width:600px;" title="" class="img-circle img-thumbnail isTooltip" src="{% static 'img/usericon.png' %}" data-original-title="Usuario"> 
-                            <ul title="Ratings" class="list-inline ratings text-center">
-                                <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                                <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <strong style="font-size: 22px;">Information</strong><br>
-                            <div class="table-responsive">
-                                <div style="font-size: 15px; font-weight: bold;" id="user-list">
-                                    <!-- User information will be displayed here -->
+                        <div class="container py-2">
+                            
+                            <div class="container">
+                                <div class="text-center my-3">
+                                    <img src="{% static 'img/icons8-register.gif' %}" width="50" alt="My image">
                                 </div>
-                            </div>
-                        </div>
+                            <div class="container mt-3">
+                                {% if access_token %}
+                                <p id="access-token" style="display: none;" >{% if access_token %}{{ access_token }}{% endif %}</p>
+                                {% else %}
+                                {% endif %}
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-12">
+                                            <div class="card">
+                                                <div style="font-size: 22px; font-weight: bold;  border: 2px solid #000000;" class="card-header">
+                                                Leave Application
+                                                </div>
+                                                <div class="card-body">
+                                                    <form style="font-weight: bold;" class="row g-3" id="leave-form">
+                                                        <!-- <form class="row g-3"> -->
+                                                            <div class="col-md-6">
+                                                                <label for="startdate" class="form-label">From Date</label>
+                                                                <input type="date" class="form-control" id="startdate" name="startdate" placeholder="Enter the DOB" value="" required autofocus>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="enddate" class="form-label">To Date</label>
+                                                                <input type="date" class="form-control" id="enddate" name="enddate" placeholder="Enter the DOB" value="" required autofocus>
+                                                            </div>
+                                                            <div class="col-12">
+                                                            <label for="reason" class="form-label">Leave Reason</label>
+                                                            <input type="text" class="form-control" name="reason" id="reason" placeholder="Reason for leave">
+                                                            </div>
+                                                            <div class="col-12">
+                                                            <button type="submit" class="btn btn-primary">Apply Leave</button>
+                                                            </div>
+                                                        </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                              </div>
+                        </div> 
+                    </div> 
                     </div>
                 </div>
-                </div>                     
-          </div> 
-        </div>
-    </div>
-</div>
+            </div>
  
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
     <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>  -->
-    <script>
+    <!-- <script>
       $(document).ready(function() {
-          $('#example').DataTable();
+          $('#user-table').DataTable();
       });
-    </script>
+    </script> -->
     <script>
         $(document).ready(function() {
             $("#logout-btn").click(function() {
                 // Make a POST request to the logout API
         console.log('entering in logout f')
-
                 $.ajax({
                     url: "/account/signout/", // Replace with the actual URL of your logout API endpoint
                     type: "POST",
@@ -184,50 +188,67 @@
             var urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(key);
         }
-
-        // Retrieve the username from the query parameter and display it
         var username = getQueryParam('username');
         if (username) {
             document.getElementById('username-display').textContent = 'Welcome, ' + username;
         }
     </script>
+   
+   <script>
+$(document).ready(function() {
+    $('#leave-form').submit(function(event) {
+        event.preventDefault();
+        
+        var startdate = $('#startdate').val();
+        var enddate = $('#enddate').val();
+        var reason = $('#reason').val();
+        var accessToken = $('#access-token').text().trim(); // Get the access token
+        
+        var data = {
+            from_date: startdate,
+            to_date: enddate,
+            reason: reason
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/emp/leave-create/', // Replace with your actual API URL
+            data: JSON.stringify(data),
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                'Content-Type': 'application/json'
+            },
+            success: function(response) {
+                alert('Leave request submitted successfully.');
+                // Handle success, e.g., show a success message to the user
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                alert('Error: ' + xhr.responseText);
+                // Handle error, e.g., show an error message to the user
+            }
+        });
+    });
+});
+</script>
+
     <script>
-        $(document).ready(function() {
-            var jwtToken = $('#access-token').text().trim(); // Get the access token
-            
+        $(document).ready(function () {
+            // AJAX call to fetch the total employee count
             $.ajax({
-                url: '/account/get-users/',
+                url: '/account/total-users/', // Your API endpoint URL
                 type: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + jwtToken
+                dataType: 'json',
+                success: function (data) {
+                    // Update the total employee count on the page
+                    $('#totalEmployees').text(data.total_users);
                 },
-                success: function(response) {
-                    console.log('Data retrieved successfully:');
-                    console.log(response);
-                    
-                    // Process and display user information on the UI
-                    var userList = $('#user-list');
-                    response.forEach(function(user) {
-                        var userInfo = '<div>' +
-                                       '<p>Username: ' + user.username + '</p>' +
-                                       '<p>Email: ' + user.email + '</p>' +
-                                       '<p>First Name: ' + user.first_name + '</p>' +
-                                       '<p>Last Name: ' + user.last_name + '</p>' +
-                                       '<p>Phone Number: ' + user.phone_number + '</p>' +
-                                       '<p>Department: ' + user.department + '</p>' +
-                                       '<p>State: ' + user.state + '</p>' +
-
-
-                                       '</div>';
-                        userList.append(userInfo);
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error:', xhr.responseText);
+                error: function (error) {
+                    console.log('Error fetching total employee count:', error);
                 }
             });
         });
-        </script>
+    </script>
+   
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>

@@ -1,0 +1,317 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <!-- DataTables JS -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Add Employee</title>
+	<style>
+        body {
+            background-color: #fff4c8; /* You can replace this with any color code you prefer */
+        }
+		.card {
+            border: 2px solid #000000; /* You can adjust the border width and color as needed */
+            padding: 20px; /* Optional: Add some padding for spacing */
+        }
+    </style>
+  </head>
+  <body>
+  <div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">Admin Dashboard</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    <li class="nav-item">
+                        <a href="/account/adminsite/" class="nav-link align-middle px-0">
+                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                      <a href="/account/addemp/" class="nav-link px-0 align-middle">
+                          <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Add Employee</span></a>
+                    </li>
+                    <li>
+                        <a href="/account/adminleave/" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Leave</span> </a>
+                    </li>
+                    <li>
+                      <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
+                         id="dashboardLink">
+                          <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                      </a>
+                      <ul class="collapse nav flex-column ms-1" id="submenu1">
+                          <li class="w-100">
+                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
+                          </li>
+                          <li>
+                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
+                          </li>
+                      </ul>
+                  </li>
+                    
+                    <li>
+                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
+                        <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                            <li class="w-100">
+                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+                <form id="logout-btn">
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                  </form>
+
+                <hr>
+            </div>
+        </div>
+        <div class="col py-3">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Add Employee Panel</a>
+                  <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-md-auto gap-2">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'img/usericon.png' %}" height="50" width="50" class="d-inline-block align-top">
+                            <span class="d-none d-sm-inline mx-1" id="username-display"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Profile Settings</a></li>
+                            <li><a class="dropdown-item" href="#">Notification</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="/admin">Admin</a></li>
+                        </ul>
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+          <div class="container">
+			<div class="text-center my-3">
+				<img src="{% static 'img/icons8-register.gif' %}" width="50" alt="My image">
+			</div>
+		<div class="container mt-3">
+			<div class="row justify-content-center">
+				<div class="col-lg-12">
+						<div class="card">
+							<div style="font-size: 22px; font-weight: bold;  border: 2px solid #000000;" class="card-header">
+							Add Employee Details
+							</div>
+							<div class="card-body">
+								<form style="font-weight: bold;" class="row g-3" id="signup-form">
+								<!-- <form class="row g-3"> -->
+									<div class="row g-3">
+										<div class="col">
+											<label for="fname" class="form-label">First name</label>
+										<input type="text" class="form-control" id="fname" name="fname" placeholder="First name" aria-label="First name">
+										</div>
+										<div class="col">
+											<label for="lname" class="form-label">Last name</label>
+										<input type="text" class="form-control" id="lname" name="lname" placeholder="Last name" aria-label="Last name">
+										</div>
+									</div>
+									<div class="col-md-6">
+									<label for="email" class="form-label">Email</label>
+									<input type="email" class="form-control" id="email" name="email" placeholder="example@gmail.com" aria-label="Last name">
+									</div>
+									<div class="col-md-6">
+										<label for="username" class="form-label">Username</label>
+										<input type="text" class="form-control" id="username" name="username">
+									</div>
+									<div class="col-md-6">
+										<label for="dob" class="form-label">DOB</label>
+										<input type="date" class="form-control" id="dob" name="dob" placeholder="Enter the DOB" value="" required autofocus>
+									</div>
+									<div class="col-md-6">
+										<label for="department" class="form-label">Department</label>
+										<select class="form-select" id="department" name="department">
+											<option selected>Choose...</option>
+											{% for value, label in options %}
+												<option value="{{ value }}">{{ label }}</option>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="col-md-6">
+										<label for="phone" class="form-label">Phone number</label>
+										<input type="text" class="form-control" id="phone" name="phone" placeholder="Phone number">
+									</div>
+									<div class="col-md-6">
+										<label for="gender" class="form-label">Gender</label>
+										<select class="form-select" id="gender" name="gender">
+											<option selected>Choose...</option>
+											{% for value, label in gender %}
+												<option value="{{ value }}">{{ label }}</option>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="col-12">
+									<label for="address" class="form-label">Address</label>
+									<input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St">
+									</div>
+									
+									<div class="col-md-6">
+									<label for="city" class="form-label">City</label>
+									<input type="text" class="form-control" id="city" name="city">
+									</div>
+									<!-- <div class="col-md-4">
+									<label for="inputState" class="form-label">State</label>
+									<select id="inputState" class="form-select">
+										<option selected>Choose...</option>
+										<option>...</option>
+									</select>
+									</div> -->
+									<div class="col-md-4">
+										<label for="state" class="form-label">State</label>
+										<select class="form-select" id="state" name="state">
+											<option selected>Choose...</option>
+											{% for value, label in state %}
+												<option value="{{ value }}">{{ label }}</option>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="col-md-2">
+									<label for="zip" class="form-label">Zip</label>
+									<input type="text" class="form-control" name="zip" id="zip">
+									</div>
+									<div class="row g-3">
+										<div class="col">
+											<label for="password1" class="form-label">Password</label>
+										<input type="text" class="form-control" id="password1" name="password1" placeholder="Password" aria-label="Password">
+										</div>
+										<div class="col">
+											<label for="password2" class="form-label">Confirm Password</label>
+										<input type="text" class="form-control" id="password2" name="password2" placeholder="Confirm Password" aria-label="Confirm Password">
+										</div>
+									</div>
+									<!-- <div class="col-12">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="gridCheck">
+										<label class="form-check-label" for="gridCheck">
+										Check me out
+										</label>
+									</div>
+									</div> -->
+									<div class="col-12">
+									<button type="submit" class="btn btn-primary">Add Employee</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+          </div> 
+          </div> 
+        </div>
+    </div>
+</div>
+ 
+<script>
+	$(document).ready(function() {
+    $("#signup-form").submit(function(event) {
+        event.preventDefault();
+
+        var formData = {
+            "username": $("#username").val(),
+            "email": $("#email").val(),
+            "first_name": $("#fname").val(),
+            "last_name": $("#lname").val(),
+            "phone_number": $("#phone").val(),
+            "gender": $("#gender").val(),
+            "date_of_birth": $("#dob").val(),
+            "department": $("#department").val(),
+            "address": $("#address").val(),
+            "city": $("#city").val(),
+            "state": $("#state").val(),
+            "zipcode": $("#zip").val(),
+            "password": $("#password1").val(),
+            "confirm_password": $("#password2").val()
+        };
+        $.ajax({
+            url: "/account/register/",
+            type: "POST",
+            data: formData,
+            success: function(response) {
+                        // Handle successful logout
+                        console.log("Logout successful!");
+                        console.log(response);
+
+                        // Redirect to the register page after successful logout
+                        window.location.href = "/account/adminsite/"; // Replace with the URL of your register page function
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.log("Registration failed!");
+                console.log(xhr.responseJSON);
+                var errors = xhr.responseJSON;
+                displayErrors(errors);
+            }
+        });
+    });
+
+    function displayErrors(errors) {
+        var errorList = "";
+        for (var field in errors) {
+            if (errors.hasOwnProperty(field)) {
+                errorList += "<strong>" + field + ":</strong> " + errors[field].join(", ") + "<br>";
+            }
+        }
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Registration Failed',
+            html: errorList,
+            confirmButtonText: 'OK'
+        });
+    }
+});
+</script>
+<script>
+    $(document).ready(function() {
+        $("#logout-btn").click(function() {
+            // Make a POST request to the logout API
+    console.log('entering in logout f')
+            $.ajax({
+                url: "/account/signout/", // Replace with the actual URL of your logout API endpoint
+                type: "POST",
+                success: function(response) {
+                    // Handle successful logout
+                    console.log("Logout successful!");
+                    console.log(response);
+
+                    // Redirect to the register page after successful logout
+                    window.location.href = "/account/"; // Replace with the URL of your register page function
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    console.log("Logout failed!");
+                    console.log(xhr.responseJSON);
+                }
+            });
+        });
+    });
+</script>
+   
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+  </body>
+</html>

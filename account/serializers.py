@@ -4,10 +4,9 @@ from django.contrib.auth import get_user_model
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
-
     class Meta:
         model = CustomUser  # Use your custom user model here
-        fields = ('username', 'email', 'phone_number', 'date_of_birth', 'password', 'confirm_password')
+        fields = ('username', 'email', 'first_name', 'last_name', 'phone_number', 'date_of_birth', 'password', 'confirm_password', 'department', 'address', 'city', 'state','gender', 'zipcode')
     def validate(self, data):
         password = data.get('password')
         confirm_password = data.get('confirm_password')
@@ -26,3 +25,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UserAuthenticationSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
+
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'phone_number', 'department')

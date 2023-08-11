@@ -1,15 +1,19 @@
 from django.db import models
 from account.models import CustomUser
-class Employee(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='emp_info')
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    # date_of_birth = models.DateField()
-    # mobile_number = models.CharField(max_length=15)
-    department = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
-    education = models.CharField(max_length=100)
-    recent_project = models.CharField(max_length=200)
+from django.utils.translation import gettext_lazy as _
+
+class LeaveRequest(models.Model):
+    STATUS_CHOICES = (
+        ('pending', _('Pending')),
+        ('accept', _('Accept')),
+        ('cancel', _('Cancel')),
+    )
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    from_date = models.DateField(_('from date'))
+    to_date = models.DateField(_('to date'))
+    status = models.CharField(_('status'), max_length=10, choices=STATUS_CHOICES, default='pending')
+    reason = models.TextField(_('reason'))
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f'{self.user.first_name} {self.user.last_name} - {self.from_date} to {self.to_date} ({self.status})'

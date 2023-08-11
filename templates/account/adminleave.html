@@ -18,25 +18,9 @@
         body {
             background-color: #fff4c8; /* You can replace this with any color code you prefer */
         }
-        .action-button {
-            padding: 5px 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-    
-        .accept-button {
-            background-color: rgb(30, 196, 30);
-            color: white;
-        }
-    
-        .cancel-button {
-            background-color: red;
-            color: white;
-        }
 		
     </style>
+    
   </head>
   <body>
   <div class="container-fluid">
@@ -48,7 +32,7 @@
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
+                        <a href="/account/adminsite/" class="nav-link align-middle px-0">
                             <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
                         </a>
                     </li>
@@ -74,7 +58,6 @@
                           </li>
                       </ul>
                   </li>
-                    
                     <li>
                         <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
                             <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
@@ -99,7 +82,7 @@
         <div class="col py-2">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Admin Panel</a>
+                    <a class="navbar-brand" href="#">Employee Leave Panel</a>
                   <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-md-auto gap-2">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -133,7 +116,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title">Total Leave Employee: </h5>
-                                            <p class="card-text"> <span id="totalLeave" style="font-size: 18px; font-weight: bold;">Loading...</span></p>
+                                            <p class="card-text"> <span id="totalEmployees" style="font-size: 18px; font-weight: bold;">Loading...</span></p>
                                             <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                                         </div>
                                     </div>
@@ -178,22 +161,24 @@
                                 </div>
                             </div> -->
                                     <div class="col-lg-10 mx-auto">
+                                        {% if access_token %}
+                                        <p id="access-token" style="display: none;">{% if access_token %}{{ access_token }}{% endif %}</p>
+                                        {% else %}
+                                        {% endif %}
                                         <div class="card rounded shadow border-0">
                                             <div class="card-body p-5 bg-white rounded">
                                                 <div class="table-responsive">
-                                                    <table id="user-table" style="width:100%" class="table table-striped table-bordered">
+                                                    <table id="leave-table" style="width:100%" class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th>Username</th>
-                                                                <!-- <th>First name</th>
-                                                                <th>Last name</th> -->
-                                                                <th>Email</th>
-                                                                <th>Phone Number</th>
-                                                                <!-- <th>Date of Birth</th> -->
-                                                                <th>Department</th>
+                                                                <th>From-Date</th>
+                                                                <th>To-Date</th>
+                                                                <th>Reason</th>
+                                                                <th>status</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody id="user-table-body">
+                                                        <tbody id="leave-table-body">
                                                             <!-- Table rows will be dynamically added here -->
                                                         </tbody>
                                                     </table>
@@ -202,34 +187,6 @@
                                         </div>
                                     </div>
                             </div>
-                            <div class="row py-3">
-                                        <div class="col-lg-10 mx-auto">
-                                            {% if access_token %}
-                                            <p id="access-token" style="display: none;">{% if access_token %}{{ access_token }}{% endif %}</p>
-                                            {% else %}
-                                            {% endif %}
-                                            <div class="card rounded shadow border-0">
-                                                <div class="card-body p-5 bg-white rounded">
-                                                    <div class="table-responsive">
-                                                        <table id="leave-table" style="width:100%" class="table table-striped table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Username</th>
-                                                                    <th>From-Date</th>
-                                                                    <th>To-Date</th>
-                                                                    <th>Reason</th>
-                                                                    <!-- <th>Status</th> -->
-                                                                    <th>Actions</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="leave-table-body">
-                                                                <!-- Table rows will be dynamically added here -->
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                </div>
                         </div> 
                     </div> 
                     </div>
@@ -279,192 +236,44 @@
             document.getElementById('username-display').textContent = 'Welcome, ' + username;
         }
     </script>
-    <!-- <script>
-        $(document).ready(function() {
-            // Fetch user data using AJAX
-            $.ajax({
-                url: "/account/user-list/",  // Replace with your actual API endpoint
-                type: "GET",
-                success: function(response) {
-                    // Populate the table with user data
-                    var userTableBody = $("#user-table-body");
-                    userTableBody.empty();  // Clear existing table rows
-                    for (var i = 0; i < response.length; i++) {
-                        var user = response[i];
-                        var row = $("<tr>");
-                        row.append($("<td>").text(user.username));
-                        // row.append($("<td>").text(user.first_name));
-                        // row.append($("<td>").text(user.last_name));
-                        row.append($("<td>").text(user.email));
-                        row.append($("<td>").text(user.phone_number));
-                        // row.append($("<td>").text(user.date_of_birth));
-                        row.append($("<td>").text(user.department));
-                        userTableBody.append(row);
-                    }
+    <script>
+    $(document).ready(function () {
+        var accessTokenElement = $('#access-token');  
+        var accessToken = accessTokenElement.text().trim(); 
 
-                    // Initialize DataTables after data is loaded
-                    $('#user-table').DataTable();
-                },
-                error: function(xhr, status, error) {
-                    console.log("Error fetching user data:", error);
-                }
-            });
-        });
-    </script> -->
-     <script>
-        $(document).ready(function() {
-            var jwtToken = $('#access-token').text().trim(); // Get the access token
-            
+        if (accessToken) {
             $.ajax({
-                url: '/account/user-list/',
+                url: '/emp/leave-create/',
                 type: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + jwtToken
-                },
-                success: function(response) {
-                    // Populate the table with user data
-                    var userTableBody = $("#user-table-body");
-                    userTableBody.empty();  // Clear existing table rows
-                    for (var i = 0; i < response.length; i++) {
-                        var user = response[i];
-                        var row = $("<tr>");
-                        row.append($("<td>").text(user.username));
-                        // row.append($("<td>").text(user.first_name));
-                        // row.append($("<td>").text(user.last_name));
-                        row.append($("<td>").text(user.email));
-                        row.append($("<td>").text(user.phone_number));
-                        // row.append($("<td>").text(user.date_of_birth));
-                        row.append($("<td>").text(user.department));
-                        userTableBody.append(row);
-                    }
-
-                    // Initialize DataTables after data is loaded
-                    $('#user-table').DataTable();
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error:', xhr.responseText);
-                }
-            });
-        });
-        </script>
-     <script>
-        $(document).ready(function () {
-            var accessTokenElement = $('#access-token');
-            var accessToken = accessTokenElement.text().trim();
-
-            if (accessToken) {
-                $.ajax({
-                    url: '/emp/leave-create/',
-                    type: 'GET',
-                    dataType: 'json',
-                    headers: {
-                        'Authorization': 'Bearer ' + accessToken
-                    },
-                    success: function (data) {
-                        var leaveTableBody = $('#leave-table-body');
-                        $.each(data, function (index, leave) {
-                            var row = $('<tr>');
-                            row.append($('<td>').text(leave.user));
-                            row.append($('<td>').text(leave.from_date));
-                            row.append($('<td>').text(leave.to_date));
-                            row.append($('<td>').text(leave.reason));
-                            // row.append($('<td>').text(leave.status));
-                            
-                            var actionsCell = $('<td>');
-                            var acceptButton = $('<button>').text('Accept');
-                            var cancelButton = $('<button>').text('Cancel');
-
-                            acceptButton.on('click', function () {
-                                updateLeaveStatus(leave.id, 'accept');
-                            });
-
-                            cancelButton.on('click', function () {
-                                updateLeaveStatus(leave.id, 'cancel');
-                            });
-
-                            acceptButton.addClass('action-button accept-button'); // Add classes to the accept button
-                            cancelButton.addClass('action-button cancel-button'); // Add classes to the cancel button
-
-                            actionsCell.append(acceptButton);
-                            actionsCell.append(cancelButton);
-                            row.append(actionsCell);
-
-                            leaveTableBody.append(row);
-                        });
-
-                        // Initialize DataTables on the table
-                        $('#leave-table').DataTable();
-                    },
-                    error: function (error) {
-                        console.log('Error fetching leave requests:', error);
-                    }
-                });
-            } else {
-                console.log('No access token available.');
-            }
-        });
-
-        function updateLeaveStatus(leaveId, newStatus) {
-            var accessTokenElement = $('#access-token');
-            var accessToken = accessTokenElement.text().trim();
-            $.ajax({
-                url: '/emp/leave-update/' + leaveId + '/',
-                type: 'PATCH',  // Use PATCH method for updating
                 dataType: 'json',
                 headers: {
                     'Authorization': 'Bearer ' + accessToken
                 },
-                data: {
-                    status: newStatus
-                },
-                success: function (response) {
-                    // Handle success response, update UI if needed
-                    console.log('Leave status updated:', response);
+                success: function (data) {
+                    var leaveTableBody = $('#leave-table-body');
+                    $.each(data, function (index, leave) {
+                        var row = $('<tr>');
+                        row.append($('<td>').text(leave.user));
+                        row.append($('<td>').text(leave.from_date));
+                        row.append($('<td>').text(leave.to_date));
+                        row.append($('<td>').text(leave.reason));
+                        row.append($('<td>').text(leave.status));
+                        leaveTableBody.append(row);
+                    });
+
+                    // Initialize DataTables on the table
+                    $('#leave-table').DataTable();
                 },
                 error: function (error) {
-                    console.log('Error updating leave status:', error);
+                    console.log('Error fetching leave requests:', error);
                 }
             });
+        } else {
+            console.log('No access token available.');
         }
+    });
     </script>
 
-    <!-- <script>
-        $(document).ready(function () {
-            var accessTokenElement = $('#access-token');  
-            var accessToken = accessTokenElement.text().trim(); 
-
-            if (accessToken) {
-                $.ajax({
-                    url: '/emp/leave-create/',
-                    type: 'GET',
-                    dataType: 'json',
-                    headers: {
-                        'Authorization': 'Bearer ' + accessToken
-                    },
-                    success: function (data) {
-                        var leaveTableBody = $('#leave-table-body');
-                        $.each(data, function (index, leave) {
-                            var row = $('<tr>');
-                            row.append($('<td>').text(leave.user));
-                            row.append($('<td>').text(leave.from_date));
-                            row.append($('<td>').text(leave.to_date));
-                            row.append($('<td>').text(leave.reason));
-                            // row.append($('<td>').text(leave.status));
-                            leaveTableBody.append(row);
-                        });
-
-                        // Initialize DataTables on the table
-                        $('#leave-table').DataTable();
-                    },
-                    error: function (error) {
-                        console.log('Error fetching leave requests:', error);
-                    }
-                });
-            } else {
-                console.log('No access token available.');
-            }
-        });
-    </script> -->
     <script>
         $(document).ready(function () {
             // AJAX call to fetch the total employee count
