@@ -88,6 +88,16 @@ class UserRegistrationAPIView(CreateAPIView):
         user = serializer.save()
         return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
     
+class UserDeleteView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def delete(self, request, user_id, format=None):
+        try:
+            user = CustomUser.objects.get(id=user_id)
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except CustomUser.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
 class UserListadminAPIView(ListAPIView):
     serializer_class = UserListSerializer
     permission_classes = (IsAuthenticated,)

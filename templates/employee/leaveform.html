@@ -9,17 +9,26 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-    <!-- DataTables JS -->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <!-- Include Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Include FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+    
+    
     <title>Dashboard</title>
     <style>
         body {
             background-color: #fff4c8; /* You can replace this with any color code you prefer */
         }
-		
+         /* Customize the calendar size */
+         #calendar {
+            max-width: 600px; /* Adjust the size as needed */
+            margin: 0 auto;
+        }
     </style>
   </head>
   <body>
@@ -124,11 +133,11 @@
                                                         <!-- <form class="row g-3"> -->
                                                             <div class="col-md-6">
                                                                 <label for="startdate" class="form-label">From Date</label>
-                                                                <input type="date" class="form-control" id="startdate" name="startdate" placeholder="Enter the DOB" value="" required autofocus>
+                                                                <input type="date" class="form-control" id="startdate" name="startdate" placeholder="Enter the DOB" value="" >
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <label for="enddate" class="form-label">To Date</label>
-                                                                <input type="date" class="form-control" id="enddate" name="enddate" placeholder="Enter the DOB" value="" required autofocus>
+                                                                <input type="date" class="form-control" id="enddate" name="enddate" placeholder="Enter the DOB" value="" >
                                                             </div>
                                                             <div class="col-12">
                                                             <label for="reason" class="form-label">Leave Reason</label>
@@ -140,16 +149,33 @@
                                                         </form>
                                                 </div>
                                             </div>
+                                            
                                         </div>
+                                        
                                         </div>
                                     </div>
+                            <div class="container mt-3">
+
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col">
+                                                <!-- Calendar Container -->
+                                                <div id="calendar"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
                               </div>
                         </div> 
                     </div> 
                     </div>
                 </div>
             </div>
- 
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+            <!-- Include FullCalendar JS -->
+            <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
     <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>  -->
     <!-- <script>
@@ -180,6 +206,7 @@
                     }
                 });
             });
+        
         });
     </script>
     <script>
@@ -195,41 +222,61 @@
     </script>
    
    <script>
-$(document).ready(function() {
-    $('#leave-form').submit(function(event) {
-        event.preventDefault();
-        
-        var startdate = $('#startdate').val();
-        var enddate = $('#enddate').val();
-        var reason = $('#reason').val();
-        var accessToken = $('#access-token').text().trim(); // Get the access token
-        
-        var data = {
-            from_date: startdate,
-            to_date: enddate,
-            reason: reason
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: '/emp/leave-create/', // Replace with your actual API URL
-            data: JSON.stringify(data),
-            headers: {
-                'Authorization': 'Bearer ' + accessToken,
-                'Content-Type': 'application/json'
-            },
-            success: function(response) {
-                alert('Leave request submitted successfully.');
-                // Handle success, e.g., show a success message to the user
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                alert('Error: ' + xhr.responseText);
-                // Handle error, e.g., show an error message to the user
+        $(document).ready(function() {
+            $('#leave-form').submit(function(event) {
+                event.preventDefault();
+                
+                var startdate = $('#startdate').val();
+                var enddate = $('#enddate').val();
+                var reason = $('#reason').val();
+                var accessToken = $('#access-token').text().trim(); // Get the access token
+                
+                var data = {
+                    from_date: startdate,
+                    to_date: enddate,
+                    reason: reason
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: '/emp/leave-create/', // Replace with your actual API URL
+                    data: JSON.stringify(data),
+                    headers: {
+                        'Authorization': 'Bearer ' + accessToken,
+                        'Content-Type': 'application/json'
+                    },
+                    success: function(response) {
+                        swal.fire({
+                            icon: 'success',
+                            title: 'Leave created successfully.',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function() {
+                            window.location.href = "/account/home/"; // Redirect to the desired URL
+                        });
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        var errors = JSON.parse(xhr.responseText);
+                         displayErrors(errors);
+                    }
+                });
+            });
+            function displayErrors(errors) {
+                var errorList = "";
+                for (var field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        errorList += "<strong>" + field + ":</strong> " + errors[field].join(", ") + "<br>";
+                    }
+                }
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Registration Failed',
+                    html: errorList,
+                    confirmButtonText: 'OK'
+                });
             }
+
         });
-    });
-});
-</script>
+    </script>
 
     <script>
         $(document).ready(function () {
@@ -248,6 +295,124 @@ $(document).ready(function() {
             });
         });
     </script>
+    <!-- <script>
+            $(document).ready(function () {
+            var accessTokenElement = $('#access-token');
+            var accessToken = accessTokenElement.text().trim();
+
+            if (accessToken) {
+                $.ajax({
+                    url: '/emp/user-leave-info/',
+                    type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': 'Bearer ' + accessToken
+                    },
+                    success: function (data) {
+                        var events = [];
+
+                        $.each(data, function (index, leave) {
+                            events.push({
+                                title: leave.reason,
+                                start: leave.from_date,
+                                end: leave.to_date
+                            });
+                        });
+
+                        // Initialize FullCalendar
+                        $('#calendar').fullCalendar({
+                            events: events,
+                            // You can customize other FullCalendar options here
+                        });
+                    },
+                    error: function (error) {
+                        console.log('Error fetching leave requests:', error);
+                    }
+                });
+            } else {
+                console.log('No access token available.');
+            }
+        });
+    </script> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                selectable: true,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                // select: function(info) {
+                //     var selectedStartDate = moment(info.start).format('YYYY-MM-DD');
+                //     var selectedEndDate = moment(info.end).format('YYYY-MM-DD'); // Include the last day
+                    
+                //     // Clear existing events
+                //     calendar.removeAllEvents();
+    
+                //     // Add events to highlight the selected range
+                //     // var eventArray = [];
+                //     // var currentDate = moment(selectedStartDate);
+                //     // var endDate = moment(selectedEndDate);
+    
+                //     // while (currentDate.isSameOrBefore(endDate)) {
+                //     //     eventArray.push({
+                //     //         title: 'Selected Range',
+                //     //         start: currentDate.format('YYYY-MM-DD'),
+                //     //         display: 'background',
+                //     //         backgroundColor: 'blue'
+                //     //     });
+                //     //     currentDate.add(1, 'day');
+                //     // }
+    
+                //     calendar.addEventSource(eventArray);
+    
+                //     // Clear the current selection
+                //     calendar.unselect();
+                // }
+            });
+            
+            var accessTokenElement = $('#access-token');
+            var accessToken = accessTokenElement.text().trim();
+            
+            $.ajax({
+                url: '/emp/user-leave-info/',
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+                },
+                success: function(data) {
+                    var events = [];
+
+                    $.each(data, function(index, leave) {
+                        events.push({
+                            title: leave.reason,
+                            start: leave.from_date,
+                            end: moment(leave.to_date).add(1, 'days').format('YYYY-MM-DD'),
+                            backgroundColor: 'blue',
+                            borderColor: 'blue'
+                        });
+                    });
+
+                    calendar.addEventSource(events);
+                    calendar.render();
+                },
+
+
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error('Error fetching events:', errorThrown);
+                }
+            });
+
+        });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    
    
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>

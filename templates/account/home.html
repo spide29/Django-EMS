@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <!-- DataTables JS -->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Dashboard</title>
@@ -27,12 +27,12 @@
         }
     
         .accept-button {
-            background-color: rgb(30, 196, 30);
+            background-color: #198754;
             color: white;
         }
     
         .cancel-button {
-            background-color: red;
+            background-color: #dc3545;
             color: white;
         }
 		
@@ -137,7 +137,8 @@
                                             <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                                         </div>
                                     </div>
-                                </div> </div>
+                                </div>
+                                 </div>
                             <div class="row py-3">
                             <!-- <div class="col-lg-10 mx-auto">
                                 <div class="card rounded shadow border-0">
@@ -191,6 +192,7 @@
                                                                 <th>Phone Number</th>
                                                                 <!-- <th>Date of Birth</th> -->
                                                                 <th>Department</th>
+                                                                <th>Actions</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user-table-body">
@@ -279,39 +281,7 @@
             document.getElementById('username-display').textContent = 'Welcome, ' + username;
         }
     </script>
-    <!-- <script>
-        $(document).ready(function() {
-            // Fetch user data using AJAX
-            $.ajax({
-                url: "/account/user-list/",  // Replace with your actual API endpoint
-                type: "GET",
-                success: function(response) {
-                    // Populate the table with user data
-                    var userTableBody = $("#user-table-body");
-                    userTableBody.empty();  // Clear existing table rows
-                    for (var i = 0; i < response.length; i++) {
-                        var user = response[i];
-                        var row = $("<tr>");
-                        row.append($("<td>").text(user.username));
-                        // row.append($("<td>").text(user.first_name));
-                        // row.append($("<td>").text(user.last_name));
-                        row.append($("<td>").text(user.email));
-                        row.append($("<td>").text(user.phone_number));
-                        // row.append($("<td>").text(user.date_of_birth));
-                        row.append($("<td>").text(user.department));
-                        userTableBody.append(row);
-                    }
-
-                    // Initialize DataTables after data is loaded
-                    $('#user-table').DataTable();
-                },
-                error: function(xhr, status, error) {
-                    console.log("Error fetching user data:", error);
-                }
-            });
-        });
-    </script> -->
-     <script>
+     <!-- <script>
         $(document).ready(function() {
             var jwtToken = $('#access-token').text().trim(); // Get the access token
             
@@ -346,125 +316,168 @@
                 }
             });
         });
-        </script>
-     <script>
-        $(document).ready(function () {
-            var accessTokenElement = $('#access-token');
-            var accessToken = accessTokenElement.text().trim();
+        </script> -->
 
-            if (accessToken) {
+        <script>
+            $(document).ready(function() {
+    var jwtToken = $('#access-token').text().trim(); // Get the access token
+
+            $.ajax({
+                url: '/account/user-list/',
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + jwtToken
+                },
+                success: function(response) {
+                    // Populate the table with user data
+                    response.forEach(user => appendTableRow(user));
+
+                    // Initialize DataTables after data is loaded
+                    $('#user-table').DataTable();
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', xhr.responseText);
+                }
+            });
+        });
+        function appendTableRow(user) {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td>${user.phone_number}</td>
+                <td>${user.department}</td>
+                <td>
+                    <button class="btn btn-success" onclick="editUser(${user.id})"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn btn-info" onclick="viewUser(${user.id})"><i class="fas fa-eye"></i> View</button>
+                    <button class="btn btn-danger" onclick="deleteUser(${user.id})"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+            `;
+            document.getElementById('user-table-body').appendChild(newRow);
+        }
+
+        function editUser(userId) {
+            // Call the edit API endpoint using userId
+            // ...
+        }
+
+        function viewUser(userId) {
+            // Call the view API endpoint using userId
+            // ...
+        }
+
+        function deleteUser(userId) {
+                var jwtToken = $('#access-token').text().trim(); // Get the access token
+
                 $.ajax({
-                    url: '/emp/leave-create/',
-                    type: 'GET',
-                    dataType: 'json',
+                    url: `/account/user-delete/${userId}/`,
+                    type: 'DELETE',
                     headers: {
-                        'Authorization': 'Bearer ' + accessToken
+                        'Authorization': 'Bearer ' + jwtToken
                     },
-                    success: function (data) {
-                        var leaveTableBody = $('#leave-table-body');
-                        $.each(data, function (index, leave) {
-                            var row = $('<tr>');
-                            row.append($('<td>').text(leave.user));
-                            row.append($('<td>').text(leave.from_date));
-                            row.append($('<td>').text(leave.to_date));
-                            row.append($('<td>').text(leave.reason));
-                            // row.append($('<td>').text(leave.status));
-                            
-                            var actionsCell = $('<td>');
-                            var acceptButton = $('<button>').text('Accept');
-                            var cancelButton = $('<button>').text('Cancel');
-
-                            acceptButton.on('click', function () {
-                                updateLeaveStatus(leave.id, 'accept');
-                            });
-
-                            cancelButton.on('click', function () {
-                                updateLeaveStatus(leave.id, 'cancel');
-                            });
-
-                            acceptButton.addClass('action-button accept-button'); // Add classes to the accept button
-                            cancelButton.addClass('action-button cancel-button'); // Add classes to the cancel button
-
-                            actionsCell.append(acceptButton);
-                            actionsCell.append(cancelButton);
-                            row.append(actionsCell);
-
-                            leaveTableBody.append(row);
-                        });
-
-                        // Initialize DataTables on the table
-                        $('#leave-table').DataTable();
+                    success: function(response) {
+                        $(`#user-row-${userId}`).remove();
+                        location.reload();
                     },
-                    error: function (error) {
-                        console.log('Error fetching leave requests:', error);
+                    error: function(xhr, status, error) {
+                        console.log('Error deleting user:', xhr.responseText);
                     }
                 });
-            } else {
-                console.log('No access token available.');
             }
-        });
+        </script>
+    <script>
+        $(document).ready(function () {
+        var accessTokenElement = $('#access-token');
+        var accessToken = accessTokenElement.text().trim();
 
-        function updateLeaveStatus(leaveId, newStatus) {
-            var accessTokenElement = $('#access-token');
-            var accessToken = accessTokenElement.text().trim();
+        if (accessToken) {
             $.ajax({
-                url: '/emp/leave-update/' + leaveId + '/',
-                type: 'PATCH',  // Use PATCH method for updating
+                url: '/emp/leave-create/',
+                type: 'GET',
                 dataType: 'json',
                 headers: {
                     'Authorization': 'Bearer ' + accessToken
                 },
-                data: {
-                    status: newStatus
-                },
-                success: function (response) {
-                    // Handle success response, update UI if needed
-                    console.log('Leave status updated:', response);
-                },
-                error: function (error) {
-                    console.log('Error updating leave status:', error);
-                }
-            });
-        }
-    </script>
+                success: function (data) {
+                    var leaveTableBody = $('#leave-table-body');
+                    $.each(data, function (index, leave) {
+                        var row = $('<tr>');
+                        row.append($('<td>').text(leave.user));
+                        row.append($('<td>').text(leave.from_date));
+                        row.append($('<td>').text(leave.to_date));
+                        row.append($('<td>').text(leave.reason));
 
-    <!-- <script>
-        $(document).ready(function () {
-            var accessTokenElement = $('#access-token');  
-            var accessToken = accessTokenElement.text().trim(); 
+                        var actionsCell = $('<td>');
+                        var acceptButton = $('<button>').text('Accept');
+                        var cancelButton = $('<button>').text('Cancel');
 
-            if (accessToken) {
-                $.ajax({
-                    url: '/emp/leave-create/',
-                    type: 'GET',
-                    dataType: 'json',
-                    headers: {
-                        'Authorization': 'Bearer ' + accessToken
-                    },
-                    success: function (data) {
-                        var leaveTableBody = $('#leave-table-body');
-                        $.each(data, function (index, leave) {
-                            var row = $('<tr>');
-                            row.append($('<td>').text(leave.user));
-                            row.append($('<td>').text(leave.from_date));
-                            row.append($('<td>').text(leave.to_date));
-                            row.append($('<td>').text(leave.reason));
-                            // row.append($('<td>').text(leave.status));
-                            leaveTableBody.append(row);
+                        acceptButton.addClass('action-button accept-button'); // Add classes to the accept button
+                        cancelButton.addClass('action-button cancel-button'); // Add classes to the cancel button
+
+                        if (leave.status === 'accept') {
+                            acceptButton.hide();
+                        } else if (leave.status === 'cancel') {
+                            cancelButton.hide();
+                        }
+
+                        acceptButton.on('click', function () {
+                            updateLeaveStatus(leave.id, 'accept', acceptButton, cancelButton);
                         });
 
-                        // Initialize DataTables on the table
-                        $('#leave-table').DataTable();
-                    },
-                    error: function (error) {
-                        console.log('Error fetching leave requests:', error);
-                    }
-                });
-            } else {
-                console.log('No access token available.');
+                        cancelButton.on('click', function () {
+                            updateLeaveStatus(leave.id, 'cancel', acceptButton, cancelButton);
+                        });
+
+                        actionsCell.append(acceptButton);
+                        actionsCell.append(cancelButton);
+                        row.append(actionsCell);
+
+                        leaveTableBody.append(row);
+                    });
+
+                    // Initialize DataTables on the table
+                    $('#leave-table').DataTable();
+                },
+                error: function (error) {
+                    console.log('Error fetching leave requests:', error);
+                }
+            });
+        } else {
+            console.log('No access token available.');
+        }
+    });
+
+    function updateLeaveStatus(leaveId, newStatus, acceptButton, cancelButton) {
+        var accessTokenElement = $('#access-token');
+        var accessToken = accessTokenElement.text().trim();
+
+        $.ajax({
+            url: '/emp/leave-update/' + leaveId + '/',
+            type: 'PATCH',  // Use PATCH method for updating
+            dataType: 'json',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            },
+            data: {
+                status: newStatus
+            },
+            success: function (response) {
+                if (newStatus === 'accept') {
+                    acceptButton.hide();
+                    cancelButton.show();
+                } else if (newStatus === 'cancel') {
+                    acceptButton.show();
+                    cancelButton.hide();
+                }
+
+                console.log('Leave status updated:', response);
+            },
+            error: function (error) {
+                console.log('Error updating leave status:', error);
             }
         });
-    </script> -->
+    }
+    </script>
     <script>
         $(document).ready(function () {
             // AJAX call to fetch the total employee count
@@ -475,6 +488,23 @@
                 success: function (data) {
                     // Update the total employee count on the page
                     $('#totalEmployees').text(data.total_users);
+                },
+                error: function (error) {
+                    console.log('Error fetching total employee count:', error);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // AJAX call to fetch the total employee count
+            $.ajax({
+                url: '/emp/Total-leave-count/', // Your API endpoint URL
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Update the total employee count on the page
+                    $('#totalLeave').text(data.total_leave);
                 },
                 error: function (error) {
                     console.log('Error fetching total employee count:', error);

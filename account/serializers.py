@@ -13,6 +13,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         if password != confirm_password:
             raise serializers.ValidationError({"confirm_password": ["The passwords do not match."]})
         return data
+    def validate_phone_number(self, value):
+        if len(value) != 10:
+            raise serializers.ValidationError("Phone number should be 10 digits.")
+        existing_user = CustomUser.objects.filter(phone_number=value).exclude(pk=self.instance.pk if self.instance else None)
+        if existing_user.exists():
+            raise serializers.ValidationError("This phone number is already registered.")
+        
+        return value
     def create(self, validated_data):
         password = validated_data.pop('password')
         confirm_password = validated_data.pop('confirm_password')

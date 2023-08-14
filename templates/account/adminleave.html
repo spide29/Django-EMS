@@ -116,7 +116,16 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title">Total Leave Employee: </h5>
-                                            <p class="card-text"> <span id="totalEmployees" style="font-size: 18px; font-weight: bold;">Loading...</span></p>
+                                            <p class="card-text"> <span id="totalLeave" style="font-size: 18px; font-weight: bold;">Loading...</span></p>
+                                            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Total Accepted Leave: </h5>
+                                            <p class="card-text"> <span id="totalacceptLeave" style="font-size: 18px; font-weight: bold;">Loading...</span></p>
                                             <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                                         </div>
                                     </div>
@@ -284,6 +293,40 @@
                 success: function (data) {
                     // Update the total employee count on the page
                     $('#totalEmployees').text(data.total_users);
+                },
+                error: function (error) {
+                    console.log('Error fetching total employee count:', error);
+                }
+            });
+        });
+    </script>
+     <script>
+        $(document).ready(function () {
+            // AJAX call to fetch the total employee count
+            $.ajax({
+                url: '/emp/Total-leave-count/', // Your API endpoint URL
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Update the total employee count on the page
+                    $('#totalLeave').text(data.total_leave);
+                },
+                error: function (error) {
+                    console.log('Error fetching total employee count:', error);
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // AJAX call to fetch the total employee count
+            $.ajax({
+                url: '/emp/accept-leave-count/', // Your API endpoint URL
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Update the total employee count on the page
+                    $('#totalacceptLeave').text(data.accepted_leave_count);
                 },
                 error: function (error) {
                     console.log('Error fetching total employee count:', error);
