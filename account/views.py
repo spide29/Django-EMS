@@ -65,6 +65,8 @@ def adminleave(request):
 #     return render(request, 'employee/emp_home.html')
 #   else:
 #     return redirect('login')
+def workallocation(request):
+    return render(request, 'account/workallocation.html')
 
 ########################################  API
 class UserRegistrationAPIView(CreateAPIView):

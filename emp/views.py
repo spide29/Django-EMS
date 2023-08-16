@@ -33,10 +33,8 @@ class LeaveUpdateAPIView(generics.UpdateAPIView):
     queryset = LeaveRequest.objects.all()
     serializer_class = LeaveUpdateSerializer
     permission_classes = [IsAuthenticated]
-    
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        # Check if the user making the request is the owner of the leave
         if instance.user != request.user:
             return Response({'detail': 'You do not have permission to update this leave.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = self.get_serializer(instance, data=request.data, partial=True)
@@ -89,10 +87,10 @@ class LeaveCountAPIView(APIView):
         accepted_leave_count = LeaveRequest.objects.filter(status='accept').count()
         return Response({"accepted_leave_count": accepted_leave_count}, status=status.HTTP_200_OK)
     
-class LeaveUserRequestCountView(APIView):
-    def get(self, request, format=None):
-        leave_request_count = LeaveRequest.objects.values('user').annotate(count=Count('user')).count()
-        return Response({'leave_request_count': leave_request_count})
+# class LeaveUserRequestCountView(APIView):
+#     def get(self, request, format=None):
+#         leave_request_count = LeaveRequest.objects.values('user').annotate(count=Count('user')).count()
+#         return Response({'leave_request_count': leave_request_count})
     
 class UserAcceptedLeaveListView(APIView):
     permission_classes = (IsAuthenticated,)
@@ -102,3 +100,21 @@ class UserAcceptedLeaveListView(APIView):
         total_accepted_leaves = accepted_leaves.count()  # Count the total number of accepted leaves
         serializer = LeaveRequestStatusUpdateSerializer(accepted_leaves, many=True)
         return Response({'total_accepted_leaves': total_accepted_leaves, 'leave_requests': serializer.data}, status=status.HTTP_200_OK)
+    
+from .models import WorkAllocation
+from .serializers import WorkAllocationSerializer
+from rest_framework.generics import CreateAPIView
+class CreateWorkAllocationView(CreateAPIView):
+    serializer_class = WorkAllocationSerializer
+    def create(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        try:
+            user_allocation = WorkAllocation.objects.get(user_id=user_id)
+        except WorkAllocation.DoesNotExist:
+            # Create a new WorkAllocation instance for the user
+            user_allocation = WorkAllocation(user_id=user_id)
+        serializer = self.get_serializer(user_allocation, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

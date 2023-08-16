@@ -11,25 +11,79 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    
     <!-- Include Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <!-- Include FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
-    
-    
     <title>Dashboard</title>
     <style>
         body {
-            background-color: #fff4c8; /* You can replace this with any color code you prefer */
+           background-color: #fff4c8; /* You can replace this with any color code you prefer */
+       }
+       .inf-content{
+           border:2px solid #DDDDDD;
+           -webkit-border-radius:10px;
+           -moz-border-radius:10px;
+           border-radius:10px;
+           box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
+       }	
+       #calendar {
+           max-width: 800px; /* Adjust the size as needed */
+           margin: 0 auto;
+           background-color: #f5f5f5;
+           border-radius: 8px;
+           padding: 20px;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+       }
+       .event-date {
+           background-color: #4CAF50;
+           color: white;
+       }
+       .booked-date {
+           background-color: #FFC107;
+           color: white;
+       }
+       .event, .booking {
+           margin-bottom: 5px;
+       }
+       .sidebar li .submenu{ 
+            list-style: none; 
+            margin: 0; 
+            padding: 0; 
+            padding-left: 1rem; 
+            padding-right: 1rem;
+            background-color: #252525;
+            color: #ffffff;
+            padding: 15px;
+            border-right: 1px solid #333;
         }
-         /* Customize the calendar size */
-         #calendar {
-            max-width: 600px; /* Adjust the size as needed */
-            margin: 0 auto;
+        .nav-item {
+            margin-bottom: 10px;
         }
-    </style>
+
+        .nav-link {
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #f39c12;
+        }
+        .has-submenu .nav-link::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            float: right;
+            position: absolute; /* Add this line */
+            top: 50%; /* Add this line */
+            transform: translateY(-50%); /* Add this line */
+        }
+        .has-submenu.open .nav-link::after {
+            content: '\f077';
+        }
+   </style>
   </head>
   <body>
   <div class="container-fluid">
@@ -39,7 +93,7 @@
                 <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">Admin Dashboard</span>
                 </a>
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                <!-- <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     <li class="nav-item">
                         <a href="/account/home/" class="nav-link align-middle px-0">
                             <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
@@ -53,7 +107,10 @@
                       <a href="#" class="nav-link px-0 align-middle">
                           <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Profile Settings</span></a>
                     </li>
-                    
+                    <li>
+                        <a href="#" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Work</span></a>
+                    </li>
                     <li>
                       <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
                          id="dashboardLink">
@@ -81,6 +138,28 @@
                         </ul>
                     </li>
                     
+                </ul> -->
+                <ul class="sidebar py-2 mb-4 nav flex-column" id="nav_accordion">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account/home/"> Home </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> Leave Form </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> Profile Settings </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> Work </a>
+                    </li>
+                    <li class="nav-item has-submenu">
+                        <a class="nav-link" href="#"> Submenu links  </a>
+                        <ul class="submenu collapse">
+                            <li><a class="nav-link" href="#">Submenu item 1 </a></li>
+                            <li><a class="nav-link" href="#">Submenu item 2 </a></li>
+                            <li><a class="nav-link" href="#">Submenu item 3 </a> </li>
+                        </ul>
+                    </li>
                 </ul>
                 <form id="logout-btn">
                     <button type="submit" class="btn btn-danger">Logout</button>
@@ -111,62 +190,61 @@
                   </div>
                 </div>
               </nav>
-                        <div class="container py-2">
+                <div class="container py-2">
                             
-                            <div class="container">
-                                <div class="text-center my-3">
-                                    <img src="{% static 'img/icons8-register.gif' %}" width="50" alt="My image">
+                    <div class="container">
+                        <div class="text-center my-3">
+                            <img src="{% static 'img/icons8-register.gif' %}" width="50" alt="My image">
+                        </div>
+                    <div class="container mt-3">
+                        {% if access_token %}
+                        <p id="access-token" style="display: none;" >{% if access_token %}{{ access_token }}{% endif %}</p>
+                        {% else %}
+                        {% endif %}
+                        <div class="row justify-content-center">
+                            <div class="col-lg-12">
+                                    <div class="card">
+                                        <div style="font-size: 22px; font-weight: bold;  border: 2px solid #000000;" class="card-header">
+                                        Leave Application
+                                        </div>
+                                        <div class="card-body">
+                                            <form style="font-weight: bold;" class="row g-3" id="leave-form">
+                                                <!-- <form class="row g-3"> -->
+                                                    <div class="col-md-6">
+                                                        <label for="startdate" class="form-label">From Date</label>
+                                                        <input type="date" class="form-control" id="startdate" name="startdate" placeholder="Enter the DOB" value="" >
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="enddate" class="form-label">To Date</label>
+                                                        <input type="date" class="form-control" id="enddate" name="enddate" placeholder="Enter the DOB" value="" >
+                                                    </div>
+                                                    <div class="col-12">
+                                                    <label for="reason" class="form-label">Leave Reason</label>
+                                                    <input type="text" class="form-control" name="reason" id="reason" placeholder="Reason for leave">
+                                                    </div>
+                                                    <div class="col-12">
+                                                    <button type="submit" class="btn btn-primary">Apply Leave</button>
+                                                    </div>
+                                                </form>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
-                            <div class="container mt-3">
-                                {% if access_token %}
-                                <p id="access-token" style="display: none;" >{% if access_token %}{{ access_token }}{% endif %}</p>
-                                {% else %}
-                                {% endif %}
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-12">
-                                            <div class="card">
-                                                <div style="font-size: 22px; font-weight: bold;  border: 2px solid #000000;" class="card-header">
-                                                Leave Application
-                                                </div>
-                                                <div class="card-body">
-                                                    <form style="font-weight: bold;" class="row g-3" id="leave-form">
-                                                        <!-- <form class="row g-3"> -->
-                                                            <div class="col-md-6">
-                                                                <label for="startdate" class="form-label">From Date</label>
-                                                                <input type="date" class="form-control" id="startdate" name="startdate" placeholder="Enter the DOB" value="" >
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <label for="enddate" class="form-label">To Date</label>
-                                                                <input type="date" class="form-control" id="enddate" name="enddate" placeholder="Enter the DOB" value="" >
-                                                            </div>
-                                                            <div class="col-12">
-                                                            <label for="reason" class="form-label">Leave Reason</label>
-                                                            <input type="text" class="form-control" name="reason" id="reason" placeholder="Reason for leave">
-                                                            </div>
-                                                            <div class="col-12">
-                                                            <button type="submit" class="btn btn-primary">Apply Leave</button>
-                                                            </div>
-                                                        </form>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                        
-                                        </div>
-                                    </div>
-                            <div class="container mt-3">
-
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col">
-                                                <!-- Calendar Container -->
-                                                <div id="calendar"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                
+                                </div>
                             </div>
-                              </div>
-                        </div> 
+                                <div class="container mt-3">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <!-- Calendar Container -->
+                                                    <div id="calendar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div> 
                     </div> 
                     </div>
                 </div>
@@ -186,7 +264,6 @@
     <script>
         $(document).ready(function() {
             $("#logout-btn").click(function() {
-                // Make a POST request to the logout API
         console.log('entering in logout f')
                 $.ajax({
                     url: "/account/signout/", // Replace with the actual URL of your logout API endpoint
@@ -195,8 +272,6 @@
                         // Handle successful logout
                         console.log("Logout successful!");
                         console.log(response);
-
-                        // Redirect to the register page after successful logout
                         window.location.href = "/account/"; // Replace with the URL of your register page function
                     },
                     error: function(xhr, status, error) {
@@ -210,7 +285,6 @@
         });
     </script>
     <script>
-        // Function to get query parameters from the URL
         function getQueryParam(key) {
             var urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(key);
@@ -225,12 +299,10 @@
         $(document).ready(function() {
             $('#leave-form').submit(function(event) {
                 event.preventDefault();
-                
                 var startdate = $('#startdate').val();
                 var enddate = $('#enddate').val();
                 var reason = $('#reason').val();
                 var accessToken = $('#access-token').text().trim(); // Get the access token
-                
                 var data = {
                     from_date: startdate,
                     to_date: enddate,
@@ -274,19 +346,16 @@
                     confirmButtonText: 'OK'
                 });
             }
-
         });
     </script>
 
     <script>
         $(document).ready(function () {
-            // AJAX call to fetch the total employee count
             $.ajax({
                 url: '/account/total-users/', // Your API endpoint URL
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    // Update the total employee count on the page
                     $('#totalEmployees').text(data.total_users);
                 },
                 error: function (error) {
@@ -348,15 +417,12 @@
                 // select: function(info) {
                 //     var selectedStartDate = moment(info.start).format('YYYY-MM-DD');
                 //     var selectedEndDate = moment(info.end).format('YYYY-MM-DD'); // Include the last day
-                    
                 //     // Clear existing events
                 //     calendar.removeAllEvents();
-    
                 //     // Add events to highlight the selected range
                 //     // var eventArray = [];
                 //     // var currentDate = moment(selectedStartDate);
                 //     // var endDate = moment(selectedEndDate);
-    
                 //     // while (currentDate.isSameOrBefore(endDate)) {
                 //     //     eventArray.push({
                 //     //         title: 'Selected Range',
@@ -366,17 +432,13 @@
                 //     //     });
                 //     //     currentDate.add(1, 'day');
                 //     // }
-    
                 //     calendar.addEventSource(eventArray);
-    
                 //     // Clear the current selection
                 //     calendar.unselect();
                 // }
             });
-            
             var accessTokenElement = $('#access-token');
             var accessToken = accessTokenElement.text().trim();
-            
             $.ajax({
                 url: '/emp/user-leave-info/',
                 type: 'GET',
@@ -386,7 +448,6 @@
                 },
                 success: function(data) {
                     var events = [];
-
                     $.each(data, function(index, leave) {
                         events.push({
                             title: leave.reason,
@@ -396,24 +457,39 @@
                             borderColor: 'blue'
                         });
                     });
-
                     calendar.addEventSource(events);
                     calendar.render();
                 },
-
-
                 error: function(xhr, textStatus, errorThrown) {
                     console.error('Error fetching events:', errorThrown);
                 }
             });
-
         });
     </script>
-    
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+        document.querySelectorAll('.sidebar .nav-link').forEach(function(element){
+            element.addEventListener('click', function (e) {
+            let nextEl = element.nextElementSibling;
+            let parentEl  = element.parentElement;	
+                if(nextEl) {
+                    e.preventDefault();	
+                    let mycollapse = new bootstrap.Collapse(nextEl);
+                    if(nextEl.classList.contains('show')){
+                    mycollapse.hide();
+                    } else {
+                        mycollapse.show();
+                        var opened_submenu = parentEl.parentElement.querySelector('.submenu.show');
+                        if(opened_submenu){
+                        new bootstrap.Collapse(opened_submenu);
+                        }
+                    }
+                }
+            }); // addEventListener
+        }) // forEach
+        }); 
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
-    
-   
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>

@@ -8,15 +8,15 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <!-- DataTables JS -->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Include Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <!-- Include FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
     <title>Dashboard</title>
@@ -31,7 +31,6 @@
             border-radius:10px;
             box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.3);
         }	
-        /* Customize the calendar size */
         #calendar {
             max-width: 600px; /* Adjust the size as needed */
             margin: 0 auto;
@@ -40,8 +39,6 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
-
-        /* Custom style for event dates */
         .event-date {
             background-color: #4CAF50;
             color: white;
@@ -53,11 +50,43 @@
             color: white;
         }
 
-        /* Style for event and booking descriptions */
         .event, .booking {
             margin-bottom: 5px;
         }
+        .sidebar li .submenu{ 
+            list-style: none; 
+            margin: 0; 
+            padding: 0; 
+            padding-left: 1rem; 
+            padding-right: 1rem;
+            background-color: #252525;
+            color: #ffffff;
+            padding: 15px;
+            border-right: 1px solid #333;
+        }
+        .nav-item {
+            margin-bottom: 10px;
+        }
 
+        .nav-link {
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #f39c12;
+        }
+        .has-submenu .nav-link::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            float: right;
+            position: absolute; /* Add this line */
+            top: 50%; /* Add this line */
+            transform: translateY(-50%); /* Add this line */
+        }
+        .has-submenu.open .nav-link::after {
+            content: '\f077';
+        }
     </style>
   </head>
   <body>
@@ -68,48 +97,29 @@
                 <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">Employee Dashboard</span>
                 </a>
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/emp/empleave/" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Leave Form</span> </a>
-                    </li>
-                    <li>
-                      <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
-                         id="dashboardLink">
-                          <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
-                      </a>
-                      <ul class="collapse nav flex-column ms-1" id="submenu1">
-                          <li class="w-100">
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
-                          </li>
-                          <li>
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
-                          </li>
-                      </ul>
-                  </li>
-                    <li>
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span></a>
-                    </li>
-                    <li>
-                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
-                        <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
-                            </li>
-                        </ul>
-                    </li>
-                   
-                </ul>
+               
+                    <ul class="sidebar py-2 mb-4 nav flex-column" id="nav_accordion">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"> Home </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/emp/empleave/"> Leave Form </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"> Profile Settings </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"> Work </a>
+                        </li>
+                        <li class="nav-item has-submenu">
+                            <a class="nav-link" href="#"> Submenu links  </a>
+                            <ul class="submenu collapse">
+                                <li><a class="nav-link" href="#">Submenu item 1 </a></li>
+                                <li><a class="nav-link" href="#">Submenu item 2 </a></li>
+                                <li><a class="nav-link" href="#">Submenu item 3 </a> </li>
+                            </ul>
+                        </li>
+                    </ul>
                 <form id="logout-btn">
                     <button type="submit" class="btn btn-danger">Logout</button>
                   </form>
@@ -121,8 +131,6 @@
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#">Employee Panel</a>
-
-                  
                   <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-md-auto gap-2">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -162,13 +170,26 @@
                                 <li><a href="#"><span class="glyphicon glyphicon-star"></span></a></li>
                             </ul>
                         </div>
-                        <div class="col-md-6">
-                            <strong style="font-size: 22px;">Information</strong><br>
+                        <div class="col-md-4">
+                            <strong style="font-size: 22px;">Employee Information: </strong><br><hr>
+
                             <div class="table-responsive">
                                 <div style="font-size: 15px; font-weight: bold;" id="user-list">
                                     <!-- User information will be displayed here -->
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-5">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total Accepted Leave: </h5>
+                                        <p class="card-text"> <span id="totalLeave" style="font-size: 18px; font-weight: bold;">Loading...</span></p>
+                                        <hr>
+                                        <h5 class="card-title">Working Project: </h5>
+                                        <p class="card-text"> <span id="totalLeave" style="font-size: 18px; font-weight: bold;">Loading...</span></p>
+                                        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -207,8 +228,6 @@
                         </div>
                     </div>
                 </div>
-
-
                   <div class="modal"  id="editLeaveModal" tabindex="-1" role="dialog" aria-labelledby="editLeaveModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                         <div class="modal-content">
@@ -249,8 +268,8 @@
     <!-- Include FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
-    <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>  -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> 
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>   -->
     <script>
       $(document).ready(function() {
           $('#example').DataTable();
@@ -365,7 +384,7 @@
                 var accessToken = accessTokenElement.text().trim(); 
                 if (accessToken) {
                     $.ajax({
-                        url: '/emp/leave-create/',
+                        url: '/emp/user-leave-info/',
                         type: 'GET',
                         dataType: 'json',
                         headers: {
@@ -378,10 +397,21 @@
                                 row.append($('<td>').text(leave.from_date));
                                 row.append($('<td>').text(leave.to_date));
                                 row.append($('<td>').text(leave.status));
-                                row.append($('<td>').html(`
-                                    <button class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#editLeaveModal" data-leave-id="${leave.id}" onclick="setEditModalLeaveId(${leave.id})"><i class="fas fa-edit"></i> Edit</button>
-                                    <button class="btn btn-danger" onclick="deleteLeave(${leave.id})"><i class="fas fa-trash"></i> Delete</button>
-                                `));
+                            //     row.append($('<td>').html(`
+                            //         <button class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#editLeaveModal" data-leave-id="${leave.id}" onclick="setEditModalLeaveId(${leave.id})"><i class="fas fa-edit"></i> Edit</button>
+                            //         <button class="btn btn-danger" onclick="deleteLeave(${leave.id})"><i class="fas fa-trash"></i> Delete</button>
+                            //     `));
+                            //     leaveTableBody.append(row);
+                            // });
+                            if (leave.status !== 'accept') {
+                                    row.append($('<td>').html(`
+                                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editLeaveModal" data-leave-id="${leave.id}" onclick="setEditModalLeaveId(${leave.id})"><i class="fas fa-edit"></i> Edit</button>
+                                        <button class="btn btn-danger" onclick="deleteLeave(${leave.id})"><i class="fas fa-trash"></i> Delete</button>
+                                    `));
+                                } else {
+                                    row.append($('<td>')); // Empty cell for accepted status
+                                }
+                                
                                 leaveTableBody.append(row);
                             });
                             $('#leave-table').DataTable();
@@ -404,7 +434,6 @@
                 };
 
                 var accessToken = $('#access-token').text().trim();
-                var leave_id = 
 
                 // Make an AJAX request to update the leave
                 $.ajax({
@@ -523,6 +552,57 @@
                 $('#modalLeaveId').text('Leave ID: ' + leaveId); // Update the content of the element
                 $('#editLeaveModal').modal('show'); // Open the modal
             }
+        </script>
+        <script>
+            $(document).ready(function () {
+                // AJAX call to fetch the total employee count
+                var accessTokenElement = $('#access-token');
+                var accessToken = accessTokenElement.text().trim();
+                $.ajax({
+                    url: '/emp/loginuser-accepted-leaves/', // Your API endpoint URL
+                    type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': 'Bearer ' + accessToken
+                    },
+                    success: function (data) {
+                        // Update the total employee count on the page
+                        $('#totalLeave').text(data.total_accepted_leaves);
+                    },
+                    error: function (error) {
+                        console.log('Error fetching total employee count:', error);
+                    }
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(){
+            document.querySelectorAll('.sidebar .nav-link').forEach(function(element){
+                
+                element.addEventListener('click', function (e) {
+
+                let nextEl = element.nextElementSibling;
+                let parentEl  = element.parentElement;	
+
+                    if(nextEl) {
+                        e.preventDefault();	
+                        let mycollapse = new bootstrap.Collapse(nextEl);
+                        
+                        if(nextEl.classList.contains('show')){
+                        mycollapse.hide();
+                        } else {
+                            mycollapse.show();
+                            // find other submenus with class=show
+                            var opened_submenu = parentEl.parentElement.querySelector('.submenu.show');
+                            // if it exists, then close all of them
+                            if(opened_submenu){
+                            new bootstrap.Collapse(opened_submenu);
+                            }
+                        }
+                    }
+                }); // addEventListener
+            }) // forEach
+            }); 
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <!-- Option 2: Separate Popper and Bootstrap JS -->

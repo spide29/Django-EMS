@@ -98,7 +98,7 @@
         <div class="col py-3">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Add Employee Panel</a>
+                    <a class="navbar-brand" href="#">Work Allocation Panel</a>
                   <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-md-auto gap-2">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -131,58 +131,42 @@
 							<div class="card-body">
 								<form style="font-weight: bold;" class="row g-3" id="signup-form">
 								<!-- <form class="row g-3"> -->
-									<div class="row g-3">
+									<div class="row g-6">
 										<div class="col">
-											<label for="fname" class="form-label">First name</label>
-										<input type="text" class="form-control" id="fname" name="fname" placeholder="First name" aria-label="First name">
+											<label for="projectname" class="form-label">Project Name</label>
+										<input type="text" class="form-control" id="projectname" name="projectname" placeholder="Project name" aria-label="Project name">
 										</div>
-										<div class="col">
-											<label for="lname" class="form-label">Last name</label>
-										<input type="text" class="form-control" id="lname" name="lname" placeholder="Last name" aria-label="Last name">
-										</div>
+										
 									</div>
 									<div class="col-md-6">
-									<label for="email" class="form-label">Email</label>
-									<input type="email" class="form-control" id="email" name="email" placeholder="example@gmail.com" aria-label="Last name">
+										<label for="startdate" class="form-label">Project Startdate</label>
+										<input type="date" class="form-control" id="startdate" name="startdate" placeholder="Project start-date" value="" required autofocus>
 									</div>
-									<div class="col-md-6">
-										<label for="username" class="form-label">Username</label>
-										<input type="text" class="form-control" id="username" name="username">
+                                    <div class="col-md-6">
+										<label for="enddate" class="form-label">Project Enddate</label>
+										<input type="date" class="form-control" id="enddate" name="enddate" placeholder="Project end-date" value="" required autofocus>
 									</div>
-									<div class="col-md-6">
-										<label for="dob" class="form-label">DOB</label>
-										<input type="date" class="form-control" id="dob" name="dob" placeholder="Enter the DOB" value="" required autofocus>
-									</div>
-									<div class="col-md-6">
-										<label for="department" class="form-label">Department</label>
+									<!-- <div class="col-md-6">
+										<label for="department" class="form-label">Employ</label>
 										<select class="form-select" id="department" name="department">
 											<option selected>Choose...</option>
 											{% for value, label in options %}
 												<option value="{{ value }}">{{ label }}</option>
 											{% endfor %}
 										</select>
-									</div>
+									</div> -->
 									<div class="col-md-6">
-										<label for="phone" class="form-label">Phone number</label>
-										<input type="text" class="form-control" id="phone" name="phone" placeholder="Phone number">
+										<label for="leadername" class="form-label">Leader name</label>
+										<input type="text" class="form-control" id="leadername" name="leadername" placeholder="leadername number">
 									</div>
-									<div class="col-md-6">
-										<label for="gender" class="form-label">Gender</label>
-										<select class="form-select" id="gender" name="gender">
-											<option selected>Choose...</option>
-											{% for value, label in gender %}
-												<option value="{{ value }}">{{ label }}</option>
-											{% endfor %}
-										</select>
+                                    <div class="col-md-6">
+										<label for="clientname" class="form-label">Client name</label>
+										<input type="text" class="form-control" id="clientname" name="clientname" placeholder="clientname number">
 									</div>
+								
 									<div class="col-12">
-									<label for="address" class="form-label">Address</label>
-									<input type="text" class="form-control" name="address" id="address" placeholder="1234 Main St">
-									</div>
-									
-									<div class="col-md-6">
-									<label for="city" class="form-label">City</label>
-									<input type="text" class="form-control" id="city" name="city">
+									<label for="description" class="form-label">Description</label>
+									<input type="text" class="form-control" name="description" id="description" placeholder="1234 Main St">
 									</div>
 									<!-- <div class="col-md-4">
 									<label for="inputState" class="form-label">State</label>
@@ -191,27 +175,14 @@
 										<option>...</option>
 									</select>
 									</div> -->
-									<div class="col-md-4">
-										<label for="state" class="form-label">State</label>
-										<select class="form-select" id="state" name="state">
-											<option selected>Choose...</option>
-											{% for value, label in state %}
-												<option value="{{ value }}">{{ label }}</option>
-											{% endfor %}
-										</select>
-									</div>
-									<div class="col-md-2">
-									<label for="zip" class="form-label">Zip</label>
-									<input type="text" class="form-control" name="zip" id="zip">
-									</div>
 									<div class="row g-3">
 										<div class="col">
-											<label for="password1" class="form-label">Password</label>
-										<input type="password" class="form-control" id="password1" name="password1" placeholder="Password" aria-label="Password">
+											<label for="username" class="form-label">Username</label>
+										<input type="text" class="form-control" id="username" name="username" placeholder="username" aria-label="username">
 										</div>
 										<div class="col">
-											<label for="password2" class="form-label">Confirm Password</label>
-										<input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm Password" aria-label="Confirm Password">
+											<label for="technology" class="form-label">Technology</label>
+										<input type="text" class="form-control" id="technology" name="technology" placeholder="technology" aria-label="technology">
 										</div>
 									</div>
 									<!-- <div class="col-12">

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import LeaveRequest
+from .models import LeaveRequest,WorkAllocation
 from account.models import CustomUser
 
 class LeaveRequestSerializer(serializers.ModelSerializer):
@@ -41,3 +41,9 @@ class LeaveRequestStatusUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeaveRequest
         fields = ('status',)
+
+class WorkAllocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkAllocation
+        # fields = '__all__'  # Include all fields from the WorkAllocation model
+        exclude = ('project_id','user')

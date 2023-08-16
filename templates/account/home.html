@@ -11,6 +11,8 @@
     <!-- DataTables JS -->
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Dashboard</title>
@@ -35,10 +37,118 @@
             background-color: #dc3545;
             color: white;
         }
-		
+		.sidebar li .submenu{ 
+            list-style: none; 
+            margin: 0; 
+            padding: 0; 
+            padding-left: 1rem; 
+            padding-right: 1rem;
+            background-color: #252525;
+            color: #ffffff;
+            padding: 15px;
+            border-right: 1px solid #333;
+        }
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #f39c12;
+        }
+        .has-submenu .nav-link::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            float: right;
+            position: absolute; /* Add this line */
+            top: 50%; /* Add this line */
+            transform: translateY(-50%); /* Add this line */
+        }
+        .has-submenu.open .nav-link::after {
+            content: '\f077';
+        }
     </style>
   </head>
   <body>
+    <div class="modal"  id="editWorkModal" tabindex="-1" role="dialog" aria-labelledby="editWorkModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+    
+            <!-- Modal Header -->
+            <p  id="modalUserId"></p>
+            <div class="modal-header">
+            <h4 class="modal-title">Work Allocation</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <form id="editWorkForm" onsubmit="editUser($('#modalUserId').text().split(':')[1].trim())">
+
+                <div class="modal-body">
+                    <div class="row g-6">
+                        <div class="col">
+                            <label for="projectname" class="form-label">Project Name</label>
+                        <input type="text" class="form-control" id="projectname" name="projectname" placeholder="Project name" aria-label="Project name">
+                        </div>
+                        
+                    </div>
+                    <div class="row g-3">
+                        <div class="col">
+                            <label for="startdate" class="form-label">Project Startdate</label>
+                            <input type="date" class="form-control" id="startdate" name="startdate" placeholder="Project start-date" value="" required autofocus>
+                        </div>
+                        <div class="col">
+                            <label for="enddate" class="form-label">Project Enddate</label>
+                            <input type="date" class="form-control" id="enddate" name="enddate" placeholder="Project end-date" value="" required autofocus>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <label for="department" class="form-label">Employ</label>
+                        <select class="form-select" id="department" name="department">
+                            <option selected>Choose...</option>
+                            {% for value, label in options %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div> -->
+                    <div class="col-md-6">
+                        <label for="leadername" class="form-label">Leader name</label>
+                        <input type="text" class="form-control" id="leadername" name="leadername" placeholder="leadername number">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="clientname" class="form-label">Client name</label>
+                        <input type="text" class="form-control" id="clientname" name="clientname" placeholder="clientname number">
+                    </div>
+                
+                    <div class="col-12">
+                    <label for="description" class="form-label">Description</label>
+                    <input type="text" class="form-control" name="description" id="description" placeholder="1234 Main St">
+                    </div>
+                 
+                    <div class="row g-3">
+                        <div class="col">
+                            <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="username" aria-label="username">
+                        </div>
+                        <div class="col">
+                            <label for="technology" class="form-label">Technology</label>
+                        <input type="text" class="form-control" id="technology" name="technology" placeholder="technology" aria-label="technology">
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" >Save changes</button>
+                </div>
+            </form>
+        </div>
+        </div>
+  </div>
   <div class="container-fluid">
     <div class="row flex-nowrap">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
@@ -46,53 +156,31 @@
                 <a href="#" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">Admin Dashboard</span>
                 </a>
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                <ul class="sidebar py-2 mb-4 nav flex-column" id="nav_accordion">
                     <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                        </a>
+                        <a class="nav-link" href="#"> Home </a>
                     </li>
-                    <li>
-                      <a href="/account/addemp/" class="nav-link px-0 align-middle">
-                          <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Add Employee</span></a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account/addemp/"> Add Employee </a>
                     </li>
-                    <li>
-                        <a href="/account/adminleave/" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Leave</span> </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account/adminleave/"> Leave  </a>
                     </li>
-                    <li>
-                      <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle"
-                         id="dashboardLink">
-                          <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
-                      </a>
-                      <ul class="collapse nav flex-column ms-1" id="submenu1">
-                          <li class="w-100">
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
-                          </li>
-                          <li>
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
-                          </li>
-                      </ul>
-                  </li>
-                    
-                    <li>
-                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                            <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
-                        <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
-                            </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account/workallocation/"> Work Allocation </a>
+                    </li>
+                    <li class="nav-item has-submenu">
+                        <a class="nav-link" href="#"> Submenu links  </a>
+                        <ul class="submenu collapse">
+                            <li><a class="nav-link" href="#">Submenu item 1 </a></li>
+                            <li><a class="nav-link" href="#">Submenu item 2 </a></li>
+                            <li><a class="nav-link" href="#">Submenu item 3 </a> </li>
                         </ul>
                     </li>
-                    
                 </ul>
                 <form id="logout-btn">
                     <button type="submit" class="btn btn-danger">Logout</button>
                   </form>
-
                 <hr>
             </div>
         </div>
@@ -140,44 +228,6 @@
                                 </div>
                                  </div>
                             <div class="row py-3">
-                            <!-- <div class="col-lg-10 mx-auto">
-                                <div class="card rounded shadow border-0">
-                                <div class="card-body p-5 bg-white rounded">
-                                    <div class="table-responsive">
-                                    <table id="example" style="width:100%" class="table table-striped table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>Username</th>
-                                            <th>Email</th>
-                                            <th>Phone number</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>63</td>
-                                            <td>2011/07/25</td>
-                                            <td>$170,750</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    </div>
-                                </div>
-                                </div>
-                            </div> -->
                                     <div class="col-lg-10 mx-auto">
                                         <div class="card rounded shadow border-0">
                                             <div class="card-body p-5 bg-white rounded">
@@ -193,6 +243,8 @@
                                                                 <!-- <th>Date of Birth</th> -->
                                                                 <th>Department</th>
                                                                 <th>Actions</th>
+                                                                <th>Work Allocation</th>
+
                                                             </tr>
                                                         </thead>
                                                         <tbody id="user-table-body">
@@ -231,12 +283,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                </div>
-                        </div> 
-                    </div> 
+                                        </div>
+                                </div> 
+                            </div> 
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
  
     <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script> -->
     <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>  -->
@@ -254,15 +306,11 @@
                     url: "/account/signout/", // Replace with the actual URL of your logout API endpoint
                     type: "POST",
                     success: function(response) {
-                        // Handle successful logout
                         console.log("Logout successful!");
                         console.log(response);
-
-                        // Redirect to the register page after successful logout
                         window.location.href = "/account/"; // Replace with the URL of your register page function
                     },
                     error: function(xhr, status, error) {
-                        // Handle error
                         console.log("Logout failed!");
                         console.log(xhr.responseJSON);
                     }
@@ -271,7 +319,6 @@
         });
     </script>
     <script>
-        // Function to get query parameters from the URL
         function getQueryParam(key) {
             var urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(key);
@@ -307,7 +354,6 @@
                         row.append($("<td>").text(user.department));
                         userTableBody.append(row);
                     }
-
                     // Initialize DataTables after data is loaded
                     $('#user-table').DataTable();
                 },
@@ -317,11 +363,9 @@
             });
         });
         </script> -->
-
         <script>
             $(document).ready(function() {
     var jwtToken = $('#access-token').text().trim(); // Get the access token
-
             $.ajax({
                 url: '/account/user-list/',
                 type: 'GET',
@@ -329,10 +373,7 @@
                     'Authorization': 'Bearer ' + jwtToken
                 },
                 success: function(response) {
-                    // Populate the table with user data
                     response.forEach(user => appendTableRow(user));
-
-                    // Initialize DataTables after data is loaded
                     $('#user-table').DataTable();
                 },
                 error: function(xhr, status, error) {
@@ -348,27 +389,60 @@
                 <td>${user.phone_number}</td>
                 <td>${user.department}</td>
                 <td>
-                    <button class="btn btn-success" onclick="editUser(${user.id})"><i class="fas fa-edit"></i> Edit</button>
                     <button class="btn btn-info" onclick="viewUser(${user.id})"><i class="fas fa-eye"></i> View</button>
                     <button class="btn btn-danger" onclick="deleteUser(${user.id})"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+                <td>
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editWorkModal" data-user-id="${user.id}" onclick="setEditmodalUserId(${user.id})"><i class="fas fa-edit"></i> Edit</button>
                 </td>
             `;
             document.getElementById('user-table-body').appendChild(newRow);
         }
-
         function editUser(userId) {
-            // Call the edit API endpoint using userId
-            // ...
+            var project_name = $('#projectname').val();
+            var project_start_date = $('#startdate').val();
+            var project_end_date = $('#enddate').val();
+            var leader_name = $('#leadername').val();
+            var client_name = $('#clientname').val();
+            var description = $('#description').val();
+            var technology = $('#technology').val();
+            var requestData = {
+                project_name: project_name,
+                project_start_date: project_start_date,
+                project_end_date: project_end_date,
+                description: description,
+                leader_name: leader_name,
+                client_name: client_name,
+                technology: technology
+            };
+            var accessToken = $('#access-token').text().trim();
+            $.ajax({
+                url: '/emp/work-allocate/'+userId+'/',  
+                type: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+                },
+                data: requestData,
+                success: function(response) {
+                    $('#editWorkForm').modal('hide');  // Close the modal
+                    swal({
+                        title: "Success!",
+                        text: "Leave has been updated.",
+                        icon: "success"
+                    });
+                },
+                error: function(error) {
+                    // Handle error, display an error message or perform other actions
+                    console.error('Error updating leave:', error);
+                }
+            });
         }
-
         function viewUser(userId) {
             // Call the view API endpoint using userId
             // ...
         }
-
         function deleteUser(userId) {
                 var jwtToken = $('#access-token').text().trim(); // Get the access token
-
                 $.ajax({
                     url: `/account/user-delete/${userId}/`,
                     type: 'DELETE',
@@ -406,36 +480,27 @@
                         row.append($('<td>').text(leave.from_date));
                         row.append($('<td>').text(leave.to_date));
                         row.append($('<td>').text(leave.reason));
-
                         var actionsCell = $('<td>');
                         var acceptButton = $('<button>').text('Accept');
                         var cancelButton = $('<button>').text('Cancel');
-
                         acceptButton.addClass('action-button accept-button'); // Add classes to the accept button
                         cancelButton.addClass('action-button cancel-button'); // Add classes to the cancel button
-
                         if (leave.status === 'accept') {
                             acceptButton.hide();
                         } else if (leave.status === 'cancel') {
                             cancelButton.hide();
                         }
-
                         acceptButton.on('click', function () {
                             updateLeaveStatus(leave.id, 'accept', acceptButton, cancelButton);
                         });
-
                         cancelButton.on('click', function () {
                             updateLeaveStatus(leave.id, 'cancel', acceptButton, cancelButton);
                         });
-
                         actionsCell.append(acceptButton);
                         actionsCell.append(cancelButton);
                         row.append(actionsCell);
-
                         leaveTableBody.append(row);
                     });
-
-                    // Initialize DataTables on the table
                     $('#leave-table').DataTable();
                 },
                 error: function (error) {
@@ -450,7 +515,6 @@
     function updateLeaveStatus(leaveId, newStatus, acceptButton, cancelButton) {
         var accessTokenElement = $('#access-token');
         var accessToken = accessTokenElement.text().trim();
-
         $.ajax({
             url: '/emp/leave-update/' + leaveId + '/',
             type: 'PATCH',  // Use PATCH method for updating
@@ -480,13 +544,11 @@
     </script>
     <script>
         $(document).ready(function () {
-            // AJAX call to fetch the total employee count
             $.ajax({
                 url: '/account/total-users/', // Your API endpoint URL
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    // Update the total employee count on the page
                     $('#totalEmployees').text(data.total_users);
                 },
                 error: function (error) {
@@ -497,13 +559,11 @@
     </script>
     <script>
         $(document).ready(function () {
-            // AJAX call to fetch the total employee count
             $.ajax({
                 url: '/emp/Total-leave-count/', // Your API endpoint URL
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    // Update the total employee count on the page
                     $('#totalLeave').text(data.total_leave);
                 },
                 error: function (error) {
@@ -512,7 +572,35 @@
             });
         });
     </script>
-   
+    <script>
+        function setEditmodalUserId(userId) {
+            $('#modalUserId').text('User ID: ' + userId); // Update the content of the element
+            $('#editWorkModal').modal('show'); // Open the modal
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+        document.querySelectorAll('.sidebar .nav-link').forEach(function(element){
+            element.addEventListener('click', function (e) {
+            let nextEl = element.nextElementSibling;
+            let parentEl  = element.parentElement;	
+                if(nextEl) {
+                    e.preventDefault();	
+                    let mycollapse = new bootstrap.Collapse(nextEl);
+                    if(nextEl.classList.contains('show')){
+                    mycollapse.hide();
+                    } else {
+                        mycollapse.show();
+                        var opened_submenu = parentEl.parentElement.querySelector('.submenu.show');
+                        if(opened_submenu){
+                        new bootstrap.Collapse(opened_submenu);
+                        }
+                    }
+                }
+            }); // addEventListener
+        }) // forEach
+        }); 
+    </script>
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>

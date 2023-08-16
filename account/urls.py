@@ -11,6 +11,8 @@ urlpatterns = [
     path('home/',views.home,name='home'),
     path('adminsite/',views.adminsite,name='adminsite'),
     path('adminleave/',views.adminleave,name='adminleave'),
+    path('workallocation/',views.workallocation,name='workallocation'),
+
 
 
 
