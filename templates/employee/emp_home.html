@@ -184,10 +184,13 @@
                                     <div class="card-body">
                                         <h5 class="card-title">Total Accepted Leave: </h5>
                                         <p class="card-text"> <span id="totalLeave" style="font-size: 18px; font-weight: bold;">Loading...</span></p>
-                                        <hr>
-                                        <h5 class="card-title">Working Project: </h5>
-                                        <p class="card-text"> <span id="totalLeave" style="font-size: 18px; font-weight: bold;">Loading...</span></p>
                                         <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Working Project: </h5>
+                                        <p class="card-text"> <span id="empproject" style="font-size: 18px; font-weight: bold;">Loading...</span></p>
                                     </div>
                                 </div>
                         </div>
@@ -568,6 +571,31 @@
                     success: function (data) {
                         // Update the total employee count on the page
                         $('#totalLeave').text(data.total_accepted_leaves);
+                        console.log("pro", data.total_accepted_leaves)
+
+                    },
+                    error: function (error) {
+                        console.log('Error fetching total employee count:', error);
+                    }
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                // AJAX call to fetch the total employee count
+                var accessTokenElement = $('#access-token');
+                var accessToken = accessTokenElement.text().trim();
+                $.ajax({
+                    url: '/emp/login-work-allocations/', // Your API endpoint URL
+                    type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': 'Bearer ' + accessToken
+                    },
+                    success: function (work) {
+                        // Update the total employee count on the page
+                        $('#empproject').text(work[0].project_name);
+                        console.log("pro", work)
                     },
                     error: function (error) {
                         console.log('Error fetching total employee count:', error);

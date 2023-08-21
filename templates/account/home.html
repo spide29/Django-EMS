@@ -79,7 +79,7 @@
         <div class="modal-content">
     
             <!-- Modal Header -->
-            <p  id="modalUserId"></p>
+            <p style="font-weight: bold;" id="modalUserId"></p>
             <div class="modal-header">
             <h4 class="modal-title">Work Allocation</h4>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -114,25 +114,24 @@
                             {% endfor %}
                         </select>
                     </div> -->
-                    <div class="col-md-6">
-                        <label for="leadername" class="form-label">Leader name</label>
-                        <input type="text" class="form-control" id="leadername" name="leadername" placeholder="leadername number">
+                    <div class="row g-3">
+
+                        <div class="col">
+                            <label for="leadername" class="form-label">Leader name</label>
+                            <input type="text" class="form-control" id="leadername" name="leadername" placeholder="leadername number">
+                        </div>
+                        <div class="col">
+                            <label for="clientname" class="form-label">Client name</label>
+                            <input type="text" class="form-control" id="clientname" name="clientname" placeholder="clientname number">
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label for="clientname" class="form-label">Client name</label>
-                        <input type="text" class="form-control" id="clientname" name="clientname" placeholder="clientname number">
-                    </div>
-                
                     <div class="col-12">
-                    <label for="description" class="form-label">Description</label>
-                    <input type="text" class="form-control" name="description" id="description" placeholder="1234 Main St">
+                    <label for="description" class="form-label">Status</label>
+                    <input type="text" class="form-control" name="description" id="description" placeholder="Running or Complete">
                     </div>
                  
                     <div class="row g-3">
-                        <div class="col">
-                            <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="username" aria-label="username">
-                        </div>
+                        
                         <div class="col">
                             <label for="technology" class="form-label">Technology</label>
                         <input type="text" class="form-control" id="technology" name="technology" placeholder="technology" aria-label="technology">

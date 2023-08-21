@@ -2,6 +2,19 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from auditlog.models import AuditlogHistoryField
+from django.contrib.auth import get_user_model
+
+class CustomAuditLog(models.Model):
+    user = models.ForeignKey('account.CustomUser', on_delete=models.CASCADE)  # Use the full path to CustomUser
+    action = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    # You can add more fields here to store additional information if needed
+
+    class Meta:
+        verbose_name = 'custom audit log'
+        verbose_name_plural = 'custom audit logs'
 
 class CustomUser(AbstractUser): ## add the user field that which admin is make the emp
 
@@ -14,6 +27,7 @@ class CustomUser(AbstractUser): ## add the user field that which admin is make t
     first_name = models.CharField(_('first name'), max_length=30)
     last_name = models.CharField(_('last name'), max_length=30)
     
+    history = AuditlogHistoryField()
     # Department choices
     DEPARTMENT_CHOICES = [
         ('python', 'Python'),
@@ -26,6 +40,12 @@ class CustomUser(AbstractUser): ## add the user field that which admin is make t
     # Address fields
     address = models.CharField(_('address'), max_length=255)
     city = models.CharField(_('city'), max_length=100)
+
+    STATUS_CHOICES = [
+        ('activate', 'Activate'),
+        ('deactivate', 'Deactivate'),
+    ]
+    status = models.CharField(_('status'), max_length=10, choices=STATUS_CHOICES, default='activate')
     
     # State choices
     STATE_CHOICES = [

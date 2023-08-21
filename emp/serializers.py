@@ -47,3 +47,8 @@ class WorkAllocationSerializer(serializers.ModelSerializer):
         model = WorkAllocation
         # fields = '__all__'  # Include all fields from the WorkAllocation model
         exclude = ('project_id','user')
+
+class WorkAllocationdisplaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkAllocation
+        fields = '__all__'

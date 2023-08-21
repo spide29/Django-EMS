@@ -1,6 +1,7 @@
 from django.db import models
 from account.models import CustomUser
 from django.utils.translation import gettext_lazy as _
+from auditlog.models import AuditlogHistoryField
 
 class LeaveRequest(models.Model):
     STATUS_CHOICES = (
@@ -14,6 +15,8 @@ class LeaveRequest(models.Model):
     to_date = models.DateField(_('to date'))
     status = models.CharField(_('status'), max_length=10, choices=STATUS_CHOICES, default='pending')
     reason = models.TextField(_('reason'))
+
+    history = AuditlogHistoryField()
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name} - {self.from_date} to {self.to_date} ({self.status})'
@@ -29,6 +32,8 @@ class WorkAllocation(models.Model):
     client_name = models.CharField(_('client name'), max_length=100)
     # department = models.CharField(_('department'), max_length=50)
     technology = models.CharField(_('technology'), max_length=50)
+
+    history = AuditlogHistoryField()
 
     def __str__(self):
         return f"{self.user.username} - {self.project_name}"

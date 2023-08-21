@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import LeaveRequest
-from .serializers import LeaveRequestSerializer, LeaveRequestStatusUpdateSerializer, LeaveUpdateSerializer
+from .serializers import LeaveRequestSerializer, LeaveRequestStatusUpdateSerializer, LeaveUpdateSerializer, WorkAllocationdisplaySerializer
 from rest_framework import generics
 
 def empleave(request):
@@ -104,6 +104,7 @@ class UserAcceptedLeaveListView(APIView):
 from .models import WorkAllocation
 from .serializers import WorkAllocationSerializer
 from rest_framework.generics import CreateAPIView
+from account.utils import create_log_entry
 class CreateWorkAllocationView(CreateAPIView):
     serializer_class = WorkAllocationSerializer
     def create(self, request, *args, **kwargs):
@@ -116,5 +117,28 @@ class CreateWorkAllocationView(CreateAPIView):
         serializer = self.get_serializer(user_allocation, data=request.data)
         if serializer.is_valid():
             serializer.save()
+            action = f"Created/Updated WorkAllocation for User ID: {user_id}"
+            create_log_entry(request.user, action)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class UserWorkAllocationView(APIView):
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        work_allocations = WorkAllocation.objects.filter(user=user)
+        serializer = WorkAllocationSerializer(work_allocations, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class WorkAllocationListView(generics.ListAPIView):
+    queryset = WorkAllocation.objects.all()
+    serializer_class = WorkAllocationdisplaySerializer
+
+
+class WorkAllocationDetailView(generics.DestroyAPIView):
+    queryset = WorkAllocation.objects.all()
+    serializer_class = WorkAllocationdisplaySerializer
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

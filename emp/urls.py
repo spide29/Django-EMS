@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import LeaveRequestListCreateAPIView, LeaveRequestStatusUpdateAPIView, LeaveCountAPIView, TotalleaveCountAPIView, UserAcceptedLeaveListView
-from .views import UserLeaveRequestListAPIView, UserLeaveDeshbordRequestListAPIView, LeaveDeleteAPIView, LeaveUpdateAPIView, CreateWorkAllocationView
+from .views import LeaveRequestListCreateAPIView, LeaveRequestStatusUpdateAPIView, LeaveCountAPIView, TotalleaveCountAPIView, UserAcceptedLeaveListView, WorkAllocationListView
+from .views import UserLeaveRequestListAPIView, UserLeaveDeshbordRequestListAPIView, LeaveDeleteAPIView, LeaveUpdateAPIView, CreateWorkAllocationView, UserWorkAllocationView, WorkAllocationDetailView
 from . import views
 
 
@@ -23,6 +23,9 @@ urlpatterns = [
     # path('Totaluser-leave-request-count/', LeaveUserRequestCountView.as_view(), name='leave-request-count'), 
     path('loginuser-accepted-leaves/', UserAcceptedLeaveListView.as_view(), name='user-accepted-leaves'), #display the login user accepted leave
     path('work-allocate/<int:user_id>/', CreateWorkAllocationView.as_view(), name='create-work-allocation'),
+    path('login-work-allocations/', UserWorkAllocationView.as_view(), name='user-work-allocations'),
+    path('workallocations/', WorkAllocationListView.as_view(), name='workallocation-list'),
+    path('workallocations/<int:pk>/', WorkAllocationDetailView.as_view(), name='workallocation-detail'),
 
 
 ]
